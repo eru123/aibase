@@ -1,0 +1,183 @@
+import { Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "sonner";
+import { Layout } from "./layouts/dashboard";
+import { Dashboard } from "./pages/dashboard";
+import { Login } from "./pages/auth/login";
+import { Register } from "./pages/auth/register";
+import { InviteAcceptance } from "./pages/auth/invite-accept";
+import { AdminSetup } from "./pages/auth/admin-setup";
+import ForgotPassword from "./pages/auth/forgot-password";
+import ResetPassword from "./pages/auth/reset-password";
+import { AuthProvider } from "./lib/auth";
+import { lazy, Suspense } from "react";
+
+// Lazy load pages
+const Profile = lazy(() => import("./pages/profile"));
+const SystemSettings = lazy(() => import("./pages/system-settings"));
+const Users = lazy(() => import("./pages/users"));
+const Onboarding = lazy(() => import("./pages/onboarding"));
+const VerifyEmail = lazy(() => import("./pages/auth/verify-email"));
+const NotFound = lazy(() => import("./pages/not-found"));
+const UIComponents = lazy(() => import("./pages/ui-components"));
+const EmailTemplates = lazy(() => import("./pages/email-templates"));
+const EmailTemplateDetail = lazy(() => import("./pages/email-template-detail"));
+const EmailSendTemplate = lazy(() => import("./pages/email-send-template"));
+const EmailSendRaw = lazy(() => import("./pages/email-send-raw"));
+const AuditLogs = lazy(() => import("./pages/audit-logs"));
+const AuthenticationLogs = lazy(() => import("./pages/authentication-logs"));
+const ErrorLogs = lazy(() => import("./pages/error-logs"));
+
+function App() {
+  return (
+    <AuthProvider>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/invite" element={<InviteAcceptance />} />
+        <Route
+          path="/auth/admin-setup"
+          element={
+            <AdminSetup onSetupComplete={() => (window.location.href = "/")} />
+          }
+        />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route path="/auth/reset-password" element={<ResetPassword />} />
+        <Route
+          path="/auth/verify-email"
+          element={
+            <Suspense fallback={<div className="p-6">Loading...</div>}>
+              <VerifyEmail />
+            </Suspense>
+          }
+        />
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route
+            path="profile"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <Profile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="u/:username"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <Profile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="users"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <Users />
+              </Suspense>
+            }
+          />
+          <Route
+            path="onboarding"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <Onboarding />
+              </Suspense>
+            }
+          />
+          <Route
+            path="system-settings"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="ui-components"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <UIComponents />
+              </Suspense>
+            }
+          />
+          <Route
+            path="email-templates"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <EmailTemplates />
+              </Suspense>
+            }
+          />
+          <Route
+            path="email-templates/new"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <EmailTemplateDetail />
+              </Suspense>
+            }
+          />
+          <Route
+            path="email-templates/:id"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <EmailTemplateDetail />
+              </Suspense>
+            }
+          />
+          <Route
+            path="emails/send-template"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <EmailSendTemplate />
+              </Suspense>
+            }
+          />
+          <Route
+            path="emails/send-raw"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <EmailSendRaw />
+              </Suspense>
+            }
+          />
+          <Route
+            path="authentication-logs"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <AuthenticationLogs />
+              </Suspense>
+            }
+          />
+          <Route
+            path="audit-logs"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <AuditLogs />
+              </Suspense>
+            }
+          />
+          <Route
+            path="error-logs"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <ErrorLogs />
+              </Suspense>
+            }
+          />
+        </Route>
+        {/* 404 - Catch all unmatched routes */}
+        <Route
+          path="*"
+          element={
+            <Suspense fallback={<div className="p-6">Loading...</div>}>
+              <NotFound />
+            </Suspense>
+          }
+        />
+      </Routes>
+      <Toaster position="top-right" richColors />
+    </AuthProvider>
+  );
+}
+
+export default App;

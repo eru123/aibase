@@ -1,0 +1,9 @@
+{
+  "php.suggest.basic": false,
+  "php.problems.exclude": {
+    "/": [
+      7103,
+      6615
+    ]
+  }
+}

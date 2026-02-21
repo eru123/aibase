@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Api\Controllers;
+
+use Api\Router;
+use Api\Context;
+use Api\Controllers\MerchantController;
+
+class Routes
+{
+
+    public static function handler(Router $api): void
+    {
+        // define middleware
+        $auth = fn(Context $ctx) => $ctx->auth()->authenticate($ctx);
+        $admin = fn(Context $ctx) => $ctx->auth()->requireAdmin($ctx);
+
+        // Authentication routes (Mixed public/auth/admin)
+        $api->group('/auth', function (Router $router) use ($auth, $admin) {
+            // Public routes
+            $router->get('/admin-count', [AuthController::class, 'adminCount']);
+            $router->post('/setup-admin', [AuthController::class, 'setupAdmin']);
+            $router->post('/register', [AuthController::class, 'register']);
+            $router->post('/verify-signup', [AuthController::class, 'verifySignup']);
+            $router->post('/login', [AuthController::class, 'login']);
+            $router->post('/refresh', [AuthController::class, 'refreshToken']);
+            $router->get('/invitation', [AuthController::class, 'getInvitation']);
+            $router->post('/accept-invitation', [AuthController::class, 'acceptInvitation']);
+            $router->get('/verify-email', [AuthController::class, 'verifyEmail']);
+            $router->post('/forgot-password', [AuthController::class, 'forgotPassword']);
+            $router->post('/reset-password', [AuthController::class, 'resetPassword']);
+
+            // Auth required
+            $router->group('', function (Router $r) use ($auth) {
+                $r->use($auth);
+                $r->post('/logout', [AuthController::class, 'logout']);
+                $r->get('/me', [AuthController::class, 'me']);
+            });
+
+            // Admin required
+            $router->group('', function (Router $r) use ($admin) {
+                $r->use($admin);
+                $r->post('/invite', [AuthController::class, 'invite']);
+            });
+
+            $router->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // System settings
+        $api->group('/system-settings', function (Router $settings) use ($admin) {
+            $settings->get('/public', [SystemSettingController::class, 'publicSettings']);
+
+            // Protected settings (Admin only)
+            $settings->group('', function (Router $r) use ($admin) {
+                $r->use($admin);
+                $r->get('/security', [SystemSettingController::class, 'getSecuritySettings']);
+                $r->put('/security', [SystemSettingController::class, 'updateSecuritySettings']);
+                $r->put('/company', [SystemSettingController::class, 'updateCompanySettings']);
+            });
+
+            $settings->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Email templates (admin)
+        $api->group('/email-templates', function (Router $templates) use ($admin) {
+            $templates->use($admin);
+            $templates->get('', [EmailTemplateController::class, 'index']);
+            $templates->post('', [EmailTemplateController::class, 'store']);
+            $templates->get('/{id}', [EmailTemplateController::class, 'show']);
+            $templates->put('/{id}', [EmailTemplateController::class, 'update']);
+            $templates->delete('/{id}', [EmailTemplateController::class, 'destroy']);
+            $templates->post('/{id}/preview', [EmailTemplateController::class, 'preview']);
+            $templates->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Email sending (admin)
+        $api->group('/emails', function (Router $emails) use ($admin) {
+            $emails->use($admin);
+            $emails->post('/send-template', [EmailSendController::class, 'sendTemplate']);
+            $emails->post('/send-raw', [EmailSendController::class, 'sendRaw']);
+            $emails->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Uploads (auth required)
+        $api->group('/uploads', function (Router $uploads) use ($auth) {
+            $uploads->use($auth);
+            $uploads->get('', [UploadController::class, 'index']);
+            $uploads->post('', [UploadController::class, 'store']);
+            $uploads->get('/{id}', [UploadController::class, 'show']);
+            $uploads->put('/{id}', [UploadController::class, 'update']);
+            $uploads->delete('/{id}', [UploadController::class, 'destroy']);
+            $uploads->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Profile routes (auth required)
+        $api->group('/profile', function (Router $profile) use ($auth) {
+            $profile->use($auth);
+            $profile->get('', [ProfileController::class, 'show']);
+            $profile->put('', [ProfileController::class, 'update']);
+            $profile->put('/password', [ProfileController::class, 'updatePassword']);
+            $profile->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Public user profile (auth required to see details, but publicly accessible via username)
+        $api->get('/u/{username}', [ProfileController::class, 'publicShow']);
+
+        // User management routes (admin)
+        $api->group('/users', function (Router $users) use ($admin) {
+            $users->use($admin);
+            $users->get('', [UserController::class, 'index']);
+            $users->put('/{id}', [UserController::class, 'update']);
+            $users->post('/{id}/approve', [UserController::class, 'approve']);
+            $users->post('/{id}/reject', [UserController::class, 'reject']);
+            $users->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Audit logs (admin only)
+        $api->group('/audit-logs', function (Router $logs) use ($admin) {
+            $logs->use($admin);
+            $logs->get('', [AuditController::class, 'index']);
+            $logs->get('/{id}', [AuditController::class, 'show']);
+            $logs->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Authentication logs (auth required - controller handles overrides for own/admin)
+        $api->group('/authentication-logs', function (Router $logs) use ($auth) {
+            $logs->use($auth);
+            $logs->get('', [AuthenticationLogController::class, 'index']);
+            $logs->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Error logs (admin only)
+        $api->group('/error-logs', function (Router $logs) use ($admin) {
+            $logs->use($admin);
+            $logs->get('', [ErrorLogController::class, 'index']);
+            $logs->get('/{id}', [ErrorLogController::class, 'show']);
+            $logs->delete('/{id}', [ErrorLogController::class, 'destroy']);
+            $logs->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Organizations (auth required)
+        $api->group('/organizations', function (Router $orgs) use ($auth) {
+            $orgs->use($auth);
+            $orgs->get('', [OrganizationController::class, 'index']);
+            $orgs->post('', [OrganizationController::class, 'store']);
+            $orgs->get('/{slug}', [OrganizationController::class, 'show']);
+            $orgs->put('/{slug}', [OrganizationController::class, 'update']);
+            $orgs->post('/{slug}/invite', [OrganizationController::class, 'invite']);
+            $orgs->put('/{slug}/users/{userId}', [OrganizationController::class, 'updateUser']);
+            $orgs->delete('/{slug}/users/{userId}', [OrganizationController::class, 'removeUser']);
+            $orgs->get('/{slug}/merchants', [MerchantController::class, 'index']);
+            $orgs->post('/{slug}/merchants', [MerchantController::class, 'store']);
+            $orgs->any('/(.*)?', [self::class, 'fallback']);
+        });
+
+        // Fall back route for api routes
+        $api->any('/(.*)?', [static::class, 'fallback']);
+    }
+
+    public static function fallback(Context $ctx)
+    {
+        $ctx->http(404);
+        return [
+            'error' => true,
+            'message' => 'API endpoint not found',
+            'code' => 404
+        ];
+    }
+}

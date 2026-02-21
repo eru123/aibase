@@ -1,0 +1,43 @@
+# Dependencies (will be installed in Docker)
+node_modules
+vendor
+
+# Build artifacts (will be built in Docker)
+dist
+
+# Version control
+.git
+.gitignore
+
+# Environment files
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test and coverage
+tests
+coverage
+.phpunit.result.cache
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# IDE
+.vscode
+.idea
+
+# Documentation
+README.md
+
+# Uploads
+uploads/*
+!uploads/.gitkeep
