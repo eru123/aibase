@@ -25,7 +25,7 @@ const DEFAULT_SETTINGS: SystemSettings = {
   allow_mail_sending: false,
   debug_enabled: false,
   show_ui_components: false,
-  company_name: 'Billing',
+  company_name: 'AIBase',
   company_logo_url: '',
   company_email: '',
   company_phone: '',
