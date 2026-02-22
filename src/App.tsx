@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { Toaster } from "sonner";
 import { Layout } from "./layouts/dashboard";
+import { SettingsLayout } from "./layouts/settings";
 import { Dashboard } from "./pages/dashboard";
 import { Login } from "./pages/auth/login";
 import { Register } from "./pages/auth/register";
@@ -13,7 +14,11 @@ import { lazy, Suspense } from "react";
 
 // Lazy load pages
 const Profile = lazy(() => import("./pages/profile"));
-const SystemSettings = lazy(() => import("./pages/system-settings"));
+const SystemSettingsCompany = lazy(() => import("./pages/system-settings-company"));
+const SystemSettingsControl = lazy(() => import("./pages/system-settings-control"));
+const SystemSettingsConfiguration = lazy(() => import("./pages/system-settings-configuration"));
+const SystemSettingsDeveloper = lazy(() => import("./pages/system-settings-developer"));
+
 const Users = lazy(() => import("./pages/users"));
 const Onboarding = lazy(() => import("./pages/onboarding"));
 const VerifyEmail = lazy(() => import("./pages/auth/verify-email"));
@@ -84,14 +89,7 @@ function App() {
               </Suspense>
             }
           />
-          <Route
-            path="system-settings"
-            element={
-              <Suspense fallback={<div className="p-6">Loading...</div>}>
-                <SystemSettings />
-              </Suspense>
-            }
-          />
+
           <Route
             path="ui-components"
             element={
@@ -161,6 +159,41 @@ function App() {
             element={
               <Suspense fallback={<div className="p-6">Loading...</div>}>
                 <ErrorLogs />
+              </Suspense>
+            }
+          />
+        </Route>
+        <Route path="/system-settings" element={<SettingsLayout />}>
+          <Route index element={<Navigate to="company" replace />} />
+          <Route
+            path="company"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettingsCompany />
+              </Suspense>
+            }
+          />
+          <Route
+            path="control"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettingsControl />
+              </Suspense>
+            }
+          />
+          <Route
+            path="configuration"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettingsConfiguration />
+              </Suspense>
+            }
+          />
+          <Route
+            path="developer"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettingsDeveloper />
               </Suspense>
             }
           />

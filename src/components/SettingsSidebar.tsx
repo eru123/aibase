@@ -2,22 +2,15 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/components/ui";
 import { useState, useEffect } from "react";
 import {
-  LayoutDashboard,
-  CreditCard,
-  User,
-  Settings,
-  Users,
-  UserCheck,
-  LayoutGrid,
-  Mail,
-  Send,
-  FileText,
-  Shield,
+  Building,
+  Sliders,
+  Server,
+  Code,
   ChevronDown,
   ChevronRight,
   X,
-  AlertTriangle,
-  ScrollText,
+  CreditCard,
+  ArrowLeft
 } from "lucide-react";
 import { brandingConfig } from "@/utils/branding";
 import { useAuth } from "@/lib/auth";
@@ -46,71 +39,22 @@ function isNavGroup(item: NavigationItem): item is NavGroup {
   return "items" in item;
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps): JSX.Element {
+export function SettingsSidebar({ isOpen, onClose }: SidebarProps): JSX.Element {
   const { user } = useAuth();
   const { data: systemSettings } = useSystemSettings();
   const location = useLocation();
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>(
     {},
   );
-  const showUIComponents =
-    user?.role === "admin" && !!systemSettings?.show_ui_components;
   const companyName =
     (systemSettings?.company_name ?? "").trim() || brandingConfig.appShortName;
   const logoUrl = (systemSettings?.company_logo_url ?? "").trim();
-  const authLogsItem: NavItem = {
-    name: "Authentication Logs",
-    href: "/authentication-logs",
-    icon: Shield,
-  };
-  const logsGroup: NavGroup = {
-    name: "Logs",
-    icon: ScrollText,
-    items: [
-      authLogsItem,
-      { name: "Audit Logs", href: "/audit-logs", icon: FileText },
-      { name: "Error Logs", href: "/error-logs", icon: AlertTriangle },
-    ],
-  };
   const navigation: NavigationItem[] = [
-    { name: "Overview", href: "/", icon: LayoutDashboard },
-    { name: "Profile", href: "/profile", icon: User },
-    ...(user?.role === "admin"
-      ? [
-        logsGroup,
-        {
-          name: "User Management",
-          icon: Users,
-          items: [
-            { name: "Users", href: "/users", icon: User },
-            { name: "Onboarding", href: "/onboarding", icon: UserCheck },
-          ],
-        },
-        {
-          name: "Email",
-          icon: Mail,
-          items: [
-            { name: "Templates", href: "/email-templates", icon: FileText },
-            {
-              name: "Send Templated",
-              href: "/emails/send-template",
-              icon: Mail,
-            },
-            { name: "Send Raw", href: "/emails/send-raw", icon: Send },
-          ],
-        },
-        { name: "Settings", href: "/system-settings/company", icon: Settings },
-        ...(showUIComponents
-          ? [
-            {
-              name: "UI Components",
-              href: "/ui-components",
-              icon: LayoutGrid,
-            },
-          ]
-          : []),
-      ]
-      : [authLogsItem]),
+    { name: "Back to Dashboard", href: "/", icon: ArrowLeft },
+    { name: "Company Profile", href: "/system-settings/company", icon: Building },
+    { name: "System Control", href: "/system-settings/control", icon: Sliders },
+    { name: "System Configuration", href: "/system-settings/configuration", icon: Server },
+    { name: "Developer Settings", href: "/system-settings/developer", icon: Code },
   ];
 
   // Close sidebar on route change (mobile only)
