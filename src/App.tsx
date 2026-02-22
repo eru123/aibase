@@ -184,7 +184,7 @@ function App() {
             }
           />
           <Route
-            path="configuration"
+            path="configuration/general"
             element={
               <Suspense fallback={<div className="p-6">Loading...</div>}>
                 <SystemSettingsConfiguration />

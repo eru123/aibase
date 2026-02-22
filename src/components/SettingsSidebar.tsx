@@ -60,7 +60,7 @@ export function SettingsSidebar({ isOpen, onClose }: SidebarProps): JSX.Element 
       name: "System Configuration",
       icon: Server,
       items: [
-        { name: "General", href: "/system-settings/configuration", icon: Cog },
+        { name: "General", href: "/system-settings/configuration/general", icon: Cog },
         { name: "SMTP", href: "/system-settings/configuration/smtp", icon: Mail },
         { name: "SMS", href: "/system-settings/configuration/sms", icon: MessageSquare },
       ],
