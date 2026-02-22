@@ -26,6 +26,17 @@ class SystemSettingController extends BaseController
         'company_website' => '',
         'company_address' => '',
     ];
+    private const SMTP_DEFAULTS = [
+        'smtp_host' => '',
+        'smtp_port' => '',
+        'smtp_username' => '',
+        'smtp_password' => '',
+        'smtp_encryption' => '',
+        'smtp_from_email' => '',
+        'smtp_from_name' => '',
+        'smtp_mail' => false,
+        'smtp_ses' => false,
+    ];
 
     public function publicSettings(Context $ctx)
     {
@@ -144,6 +155,60 @@ class SystemSettingController extends BaseController
         ]);
     }
 
+    public function getSmtpSettings(Context $ctx)
+    {
+        $auth = $ctx->auth()->requireAdmin($ctx);
+        if ($auth !== true)
+            return $auth;
+
+        $values = SystemSetting::getValues(array_keys(self::SMTP_DEFAULTS), self::SMTP_DEFAULTS);
+        $payload = $this->normalizeSmtpSettings($values);
+
+        return $this->ok($ctx, [
+            'success' => true,
+            'data' => $payload,
+        ]);
+    }
+
+    public function updateSmtpSettings(Context $ctx)
+    {
+        $payload = $this->input();
+
+        $settings = $payload['settings'] ?? $payload;
+
+        if (!is_array($settings)) {
+            return $this->badRequest($ctx, 'settings payload must be an object');
+        }
+
+        $updated = [];
+        foreach (self::SMTP_DEFAULTS as $key => $default) {
+            if (!array_key_exists($key, $settings)) {
+                continue;
+            }
+            $raw = $settings[$key];
+            if (is_bool($default)) {
+                $normalized = SystemSetting::castBool($raw, $default);
+            }
+            else {
+                $normalized = $raw === null ? '' : (is_string($raw) ? trim($raw) : (string)$raw);
+            }
+            SystemSetting::upsertValue($key, $normalized);
+            $updated[$key] = $normalized;
+        }
+
+        if (empty($updated)) {
+            return $this->badRequest($ctx, 'No valid settings provided');
+        }
+
+        $values = SystemSetting::getValues(array_keys(self::SMTP_DEFAULTS), self::SMTP_DEFAULTS);
+        $payload = $this->normalizeSmtpSettings($values);
+
+        return $this->ok($ctx, [
+            'success' => true,
+            'data' => $payload,
+        ]);
+    }
+
     private function normalizeSecuritySettings(array $values): array
     {
         $normalized = [];
@@ -163,6 +228,21 @@ class SystemSettingController extends BaseController
                 continue;
             }
             $normalized[$key] = is_string($value) ? $value : (string)$value;
+        }
+        return $normalized;
+    }
+
+    private function normalizeSmtpSettings(array $values): array
+    {
+        $normalized = [];
+        foreach (self::SMTP_DEFAULTS as $key => $default) {
+            if (is_bool($default)) {
+                $normalized[$key] = SystemSetting::castBool($values[$key] ?? $default, $default);
+            }
+            else {
+                $value = $values[$key] ?? $default;
+                $normalized[$key] = $value === null ? '' : (is_string($value) ? $value : (string)$value);
+            }
         }
         return $normalized;
     }
