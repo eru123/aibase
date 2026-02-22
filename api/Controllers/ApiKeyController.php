@@ -284,7 +284,7 @@ class ApiKeyController extends BaseController
      */
     private function generateApiKey(): string
     {
-        $prefix = 'billing'; // Project prefix
+        $prefix = 'aibase'; // Project prefix
         $randomBytes = random_bytes(32);
         $key = bin2hex($randomBytes);
 

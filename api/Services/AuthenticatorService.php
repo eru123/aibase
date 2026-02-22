@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1)
+;
 
 namespace Api\Services;
 
@@ -71,7 +72,7 @@ class AuthenticatorService
             ((ord($hash[$offset + 1]) & 0xff) << 16) |
             ((ord($hash[$offset + 2]) & 0xff) << 8) |
             (ord($hash[$offset + 3]) & 0xff)
-        ) % (10 ** self::DIGITS);
+            ) % (10 ** self::DIGITS);
 
         return str_pad((string)$code, self::DIGITS, '0', STR_PAD_LEFT);
     }
@@ -79,7 +80,7 @@ class AuthenticatorService
     /**
      * Get QR code provisioning URI
      */
-    public function getProvisioningUri(string $secret, string $accountName, string $issuer = 'Billing'): string
+    public function getProvisioningUri(string $secret, string $accountName, string $issuer = 'AIBase'): string
     {
         $params = [
             'secret' => $secret,
@@ -120,8 +121,8 @@ class AuthenticatorService
 
         for ($i = 0; $i < 4; $i++) {
             if (
-                $paddingCharCount === $allowedValues[$i] &&
-                substr($secret, - ($allowedValues[$i])) !== str_repeat('=', $allowedValues[$i])
+            $paddingCharCount === $allowedValues[$i] &&
+            substr($secret, -($allowedValues[$i])) !== str_repeat('=', $allowedValues[$i])
             ) {
                 return '';
             }
@@ -136,7 +137,8 @@ class AuthenticatorService
             for ($j = 0; $j < 8; $j++) {
                 if (!isset($secret[$i + $j]) || ($y = strpos($alphabet, $secret[$i + $j])) === false) {
                     $x .= '00000';
-                } else {
+                }
+                else {
                     $x .= str_pad(decbin($y), 5, '0', STR_PAD_LEFT);
                 }
             }

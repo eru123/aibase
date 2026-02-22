@@ -37,11 +37,11 @@ class BaseModel implements \ArrayAccess
         }
 
         if (self::$pdo === null) {
-            $DBNAME = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'billing';
+            $DBNAME = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?: 'aibase';
 
             $dsn = 'mysql:host=' . ($_ENV['DB_HOST'] ?? 'localhost') . ';dbname=' . $DBNAME . ';charset=utf8mb4';
-            $username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'billing';
-            $password = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'billing';
+            $username = $_ENV['DB_USER'] ?? getenv('DB_USER') ?: 'aibase';
+            $password = $_ENV['DB_PASS'] ?? getenv('DB_PASS') ?: 'aibase';
 
             self::$pdo = new \PDO($dsn, $username, $password, [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,

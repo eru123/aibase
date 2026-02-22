@@ -23,7 +23,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
     const confirmed = await confirmModal({
       title: 'Sign out',
-      message: 'Are you sure you want to log out of Billing Portal?',
+      message: 'Are you sure you want to log out of Portal?',
       confirmText: 'Sign out',
       cancelText: 'Cancel',
       type: 'warning',
@@ -48,7 +48,7 @@ export function Header({ onMenuClick }: HeaderProps) {
           >
             <Menu className="h-5 w-5" />
           </Button>
-          
+
           <div className="flex-1">
             <h1 className="text-lg font-semibold text-gray-900">
               Welcome back, {displayName}!

@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1)
+;
 
 use Phinx\Migration\AbstractMigration;
 
@@ -62,7 +63,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"Billing","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
+        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
         1
     ),
     (
@@ -118,7 +119,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"Billing","currentYear":2026,"logoUrl":null,"userName":"Alex","loginUrl":"https://example.com/login","companyEmail":"support@example.com"}',
+        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","loginUrl":"https://example.com/login","companyEmail":"support@example.com"}',
         1
     ),
     (
@@ -169,7 +170,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"Billing","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
+        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
         1
     )
 ON DUPLICATE KEY UPDATE

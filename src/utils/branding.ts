@@ -4,10 +4,10 @@
  */
 
 export const brandingConfig = {
-  appName: import.meta.env.VITE_APP_NAME || 'Billing Portal',
-  appShortName: import.meta.env.VITE_APP_SHORT_NAME || 'Billing',
-  companyName: import.meta.env.VITE_COMPANY_NAME || 'Billing',
-  hotelBrandName: import.meta.env.VITE_HOTEL_BRAND_NAME || 'Billing',
+  appName: import.meta.env.VITE_APP_NAME || 'AIBase Portal',
+  appShortName: import.meta.env.VITE_APP_SHORT_NAME || 'AIBase',
+  companyName: import.meta.env.VITE_COMPANY_NAME || 'AIBase',
+  hotelBrandName: import.meta.env.VITE_HOTEL_BRAND_NAME || 'AIBase',
 } as const
 
 export type BrandingConfig = typeof brandingConfig

@@ -158,7 +158,7 @@ export function Register() {
                   <label htmlFor="username" className="text-sm font-medium">
                     Username
                   </label>
-                  <Input id="username" placeholder="billing-user" {...formRegister('username')} />
+                  <Input id="username" placeholder="aibase-user" {...formRegister('username')} />
                   {errors.username && <p className="text-sm text-red-600">{errors.username.message}</p>}
                 </div>
 
@@ -166,7 +166,7 @@ export function Register() {
                   <label htmlFor="email" className="text-sm font-medium">
                     Email
                   </label>
-                  <Input id="email" type="email" placeholder="you@billing.local" {...formRegister('email')} />
+                  <Input id="email" type="email" placeholder="you@aibase.local" {...formRegister('email')} />
                   {errors.email && <p className="text-sm text-red-600">{errors.email.message}</p>}
                 </div>
 

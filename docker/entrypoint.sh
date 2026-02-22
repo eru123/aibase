@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Starting Billing Application Container..."
+echo "Starting AIBase Application Container..."
 
 # Install pnpm dependencies if needed
 # if [ -f "package.json" ]; then

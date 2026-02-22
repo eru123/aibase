@@ -125,7 +125,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                 Welcome to {brandingConfig.appName}
               </h1>
               <p className="text-sm text-muted-foreground sm:text-base">
-                Let&apos;s create your administrator account and set up Billing Portal.
+                Let&apos;s create your administrator account and set up AIBase Portal.
               </p>
             </div>
           </div>
@@ -140,7 +140,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                 Create the primary administrator account
               </CardTitle>
               <CardDescription className="text-center text-sm text-muted-foreground">
-                We&apos;ll use this information to configure your Billing workspace. You can add more team members later.
+                We&apos;ll use this information to configure your AIBase workspace. You can add more team members later.
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-8">
@@ -161,7 +161,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="admin@billing.local" {...register('email')} />
+                      <Input id="email" type="email" placeholder="admin@aibase.local" {...register('email')} />
                       {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
                     </div>
                   </div>

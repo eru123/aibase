@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1)
+;
 
 use Phinx\Migration\AbstractMigration;
 
@@ -10,7 +11,7 @@ final class AddCompanySystemSettings extends AbstractMigration
     {
         $this->execute(
             "INSERT INTO system_settings (`key`, `value`) VALUES
-                ('company_name', 'Billing'),
+                ('company_name', 'AIBase'),
                 ('company_logo_url', ''),
                 ('company_email', ''),
                 ('company_phone', ''),

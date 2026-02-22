@@ -18,7 +18,7 @@ class ReservedWords
         'settings',
         'organizations',
         'users',
-        'billing',
+        'aibase',
         'dashboard',
         'profile',
         'home',

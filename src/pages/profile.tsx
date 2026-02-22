@@ -381,7 +381,7 @@ export default function Profile() {
                     }
                   />
                   <p className="text-xs text-gray-500">
-                    Used for billing and reporting.
+                    Used for aibase and reporting.
                   </p>
                 </div>
                 <Button type="submit" disabled={saving}>

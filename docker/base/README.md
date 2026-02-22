@@ -1,6 +1,6 @@
-# Billing Base Docker Image
+# AIBase Base Docker Image
 
-This is the base Docker image for Billing applications. It includes:
+This is the base Docker image for AIBase applications. It includes:
 
 - PHP 8.4 with Apache
 - Node.js 22.x with pnpm
@@ -11,13 +11,13 @@ This is the base Docker image for Billing applications. It includes:
 ## Building the Image
 
 ```bash
-docker build -t eru123/billing-base:latest .
-docker push eru123/billing-base:latest
+docker build -t eru123/aibase-base:latest .
+docker push eru123/aibase-base:latest
 ```
 
 ## Versioning
 
-Tag format: `eru123/billing-base:X.Y.Z`
+Tag format: `eru123/aibase-base:X.Y.Z`
 
 - Major version: Breaking changes
 - Minor version: New features/extensions

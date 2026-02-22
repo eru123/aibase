@@ -19,7 +19,7 @@ class SystemSettingController extends BaseController
         'show_ui_components' => false,
     ];
     private const COMPANY_DEFAULTS = [
-        'company_name' => 'Billing',
+        'company_name' => 'AIBase',
         'company_logo_url' => '',
         'company_email' => '',
         'company_phone' => '',

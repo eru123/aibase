@@ -389,7 +389,7 @@ export default function UIComponentsPage() {
       { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
       { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
       { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-      { value: 'billing', label: 'Billing', description: 'Invoices and usage', disabled: true },
+      { value: 'aibase', label: 'AIBase', description: 'Invoices and usage', disabled: true },
     ],
     []
   )
@@ -399,7 +399,7 @@ export default function UIComponentsPage() {
       const label = type ? `${type.charAt(0).toUpperCase()}${type.slice(1)}` : 'Default'
       const confirmed = await confirmModal({
         title: `${label} confirmation`,
-        message: 'This action will update billing preferences.',
+        message: 'This action will update app preferences.',
         confirmText: 'Confirm',
         cancelText: 'Cancel',
         type,
@@ -486,7 +486,7 @@ export default function UIComponentsPage() {
 <div className="space-y-4">
   <div>
     <Label htmlFor="example-email">Email</Label>
-    <Input id="example-email" type="email" placeholder="you@billing.local" />
+    <Input id="example-email" type="email" placeholder="you@aibase.local" />
   </div>
   <div>
     <Label htmlFor="example-password">Password</Label>
@@ -498,7 +498,7 @@ export default function UIComponentsPage() {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="example-email">Email</Label>
-                  <Input id="example-email" type="email" placeholder="you@billing.local" />
+                  <Input id="example-email" type="email" placeholder="you@aibase.local" />
                 </div>
                 <div>
                   <Label htmlFor="example-password">Password</Label>
@@ -977,7 +977,7 @@ const dropdownOptions: DropdownOption[] = [
   { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
   { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
   { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-  { value: 'billing', label: 'Billing', description: 'Invoices and usage', disabled: true },
+  { value: 'aibase', label: 'AIBase', description: 'Invoices and usage', disabled: true },
 ]
 `,
             code: `
@@ -1005,7 +1005,7 @@ const dropdownOptions: DropdownOption[] = [
   { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
   { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
   { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-  { value: 'billing', label: 'Billing', description: 'Invoices and usage', disabled: true },
+  { value: 'aibase', label: 'AIBase', description: 'Invoices and usage', disabled: true },
 ]
 `,
             code: `
@@ -1038,7 +1038,7 @@ const dropdownOptions: DropdownOption[] = [
   { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
   { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
   { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-  { value: 'billing', label: 'Billing', description: 'Invoices and usage', disabled: true },
+  { value: 'aibase', label: 'AIBase', description: 'Invoices and usage', disabled: true },
 ]
 const [multiDropdownValue, setMultiDropdownValue] = useState<string[]>(['alerts'])
 `,
@@ -1228,7 +1228,7 @@ const runConfirm = async (type?: 'success' | 'warning' | 'danger' | 'error' | 'i
   const label = type ? type.charAt(0).toUpperCase() + type.slice(1) : 'Default'
   const confirmed = await confirmModal({
     title: label + ' confirmation',
-    message: 'This action will update billing preferences.',
+    message: 'This action will update aibase preferences.',
     confirmText: 'Confirm',
     cancelText: 'Cancel',
     type,

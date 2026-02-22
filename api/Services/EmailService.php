@@ -1,6 +1,7 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1)
+;
 
 namespace Api\Services;
 
@@ -125,15 +126,15 @@ final class EmailService
                 error_log("Email template not found: {$templateName}");
                 return false;
             }
-            if (isset($template['is_active']) && (int) $template['is_active'] !== 1) {
+            if (isset($template['is_active']) && (int)$template['is_active'] !== 1) {
                 error_log("Email template disabled: {$templateName}");
                 return false;
             }
 
-            $subjectTemplate = (string) ($template['subject'] ?? '');
-            $htmlTemplate = (string) ($template['body_html'] ?? '');
+            $subjectTemplate = (string)($template['subject'] ?? '');
+            $htmlTemplate = (string)($template['body_html'] ?? '');
             $textTemplate = isset($template['body_text']) && $template['body_text'] !== ''
-                ? (string) $template['body_text']
+                ? (string)$template['body_text']
                 : null;
 
             $renderData = array_merge($this->getBaseTemplateData(), $data);
@@ -150,7 +151,7 @@ final class EmailService
             }
 
             return $this->smtp->sendMessage(
-                [['email' => $to, 'name' => $toName]],
+            [['email' => $to, 'name' => $toName]],
                 $subject,
                 $html,
                 $options
@@ -165,7 +166,7 @@ final class EmailService
         $host = $VITE_APP_URL ?: ($_SERVER['HTTP_HOST'] ?? 'localhost');
 
         // make sure host has no protocol prefix
-        $host = preg_replace('#^https?://#', '', (string) $host);
+        $host = preg_replace('#^https?://#', '', (string)$host);
         $base = rtrim(rtrim($protocol . $host, '/') . '/' . ltrim($uri, '/'), '/');
 
         return $base;
@@ -198,8 +199,8 @@ final class EmailService
         $loginUrl = $this->appUrl('/login');
 
         return [
-            'companyName' => $companyName ?: 'Billing',
-            'currentYear' => (int) gmdate('Y'),
+            'companyName' => $companyName ?: 'AIBase',
+            'currentYear' => (int)gmdate('Y'),
             'logoUrl' => $logoUrl ?: null,
             'companyEmail' => $this->normalizeOptionalString($companyEmail),
             'companyPhone' => $this->normalizeOptionalString($companyPhone),
@@ -215,13 +216,13 @@ final class EmailService
         $host = parse_url($this->appUrl('/'), PHP_URL_HOST);
         if (is_string($host) && $host !== '') {
             $label = explode('.', $host)[0] ?? $host;
-            $label = trim((string) $label);
+            $label = trim((string)$label);
             if ($label !== '') {
                 return ucfirst($label);
             }
         }
 
-        return 'Billing';
+        return 'AIBase';
     }
 
     private function readEnv(string $key): ?string
@@ -230,7 +231,7 @@ final class EmailService
         if ($value === false || $value === null) {
             return null;
         }
-        $trimmed = trim((string) $value);
+        $trimmed = trim((string)$value);
         return $trimmed === '' ? null : $trimmed;
     }
 
@@ -251,20 +252,21 @@ final class EmailService
         }
 
         try {
-            return (bool) $callback();
-        } catch (\Throwable $e) {
+            return (bool)$callback();
+        }
+        catch (\Throwable $e) {
             error_log('Email send failed: ' . $e->getMessage());
 
             // Log to error_logs table
             try {
                 $errorData = [
-                    'type'    => 'email_send_failure',
-                    'error'   => [
+                    'type' => 'email_send_failure',
+                    'error' => [
                         'message' => $e->getMessage(),
-                        'code'    => $e->getCode(),
-                        'file'    => $e->getFile(),
-                        'line'    => $e->getLine(),
-                        'trace'   => $e->getTraceAsString(),
+                        'code' => $e->getCode(),
+                        'file' => $e->getFile(),
+                        'line' => $e->getLine(),
+                        'trace' => $e->getTraceAsString(),
                     ],
                 ];
 
@@ -274,7 +276,8 @@ final class EmailService
                 }
 
                 ErrorLog::capture($errorData);
-            } catch (\Throwable $logEx) {
+            }
+            catch (\Throwable $logEx) {
                 error_log('Failed to write error log: ' . $logEx->getMessage());
             }
 

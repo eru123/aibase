@@ -27,7 +27,7 @@ const DEFAULT_SETTINGS: SystemSettings = {
   allow_mail_sending: false,
   debug_enabled: false,
   show_ui_components: false,
-  company_name: "Billing",
+  company_name: "AIBase",
   company_logo_url: "",
   company_email: "",
   company_phone: "",
@@ -194,7 +194,7 @@ export default function SystemSettingsPage() {
                   <Label htmlFor="company_name">Company name</Label>
                   <Input
                     id="company_name"
-                    placeholder="Billing"
+                    placeholder="AIBase"
                     value={form.company_name}
                     onChange={(event) =>
                       setForm((prev) => ({

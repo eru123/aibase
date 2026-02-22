@@ -73,7 +73,7 @@ export function InviteAcceptance() {
         <Card>
           <CardHeader>
             <CardTitle>Accept invitation</CardTitle>
-            <CardDescription>Join your Billing workspace.</CardDescription>
+            <CardDescription>Join your AIBase workspace.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {status === 'loading' && <p className="text-sm text-gray-600">Loading invitation...</p>}
@@ -89,7 +89,7 @@ export function InviteAcceptance() {
               <div className="space-y-3">
                 <p className="text-sm text-emerald-600">{message}</p>
                 <Link to="/login" className="mt-4 w-fit block text-sm text-white bg-primary px-4 py-2 rounded hover:bg-primary-dark">
-                  Sign in to Billing
+                  Sign in to AIBase
                 </Link>
               </div>
             )}
