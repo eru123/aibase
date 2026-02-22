@@ -17,6 +17,8 @@ const Profile = lazy(() => import("./pages/profile"));
 const SystemSettingsCompany = lazy(() => import("./pages/system-settings-company"));
 const SystemSettingsControl = lazy(() => import("./pages/system-settings-control"));
 const SystemSettingsConfiguration = lazy(() => import("./pages/system-settings-configuration"));
+const SystemSettingsConfigurationSmtp = lazy(() => import("./pages/system-settings-configuration-smtp"));
+const SystemSettingsConfigurationSms = lazy(() => import("./pages/system-settings-configuration-sms"));
 const SystemSettingsDeveloper = lazy(() => import("./pages/system-settings-developer"));
 
 const Users = lazy(() => import("./pages/users"));
@@ -186,6 +188,22 @@ function App() {
             element={
               <Suspense fallback={<div className="p-6">Loading...</div>}>
                 <SystemSettingsConfiguration />
+              </Suspense>
+            }
+          />
+          <Route
+            path="configuration/smtp"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettingsConfigurationSmtp />
+              </Suspense>
+            }
+          />
+          <Route
+            path="configuration/sms"
+            element={
+              <Suspense fallback={<div className="p-6">Loading...</div>}>
+                <SystemSettingsConfigurationSms />
               </Suspense>
             }
           />

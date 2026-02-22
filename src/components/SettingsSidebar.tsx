@@ -10,7 +10,10 @@ import {
   ChevronRight,
   X,
   CreditCard,
-  ArrowLeft
+  ArrowLeft,
+  Mail,
+  MessageSquare,
+  Cog
 } from "lucide-react";
 import { brandingConfig } from "@/utils/branding";
 import { useAuth } from "@/lib/auth";
@@ -53,7 +56,15 @@ export function SettingsSidebar({ isOpen, onClose }: SidebarProps): JSX.Element 
     { name: "Back to Dashboard", href: "/", icon: ArrowLeft },
     { name: "Company Profile", href: "/system-settings/company", icon: Building },
     { name: "System Control", href: "/system-settings/control", icon: Sliders },
-    { name: "System Configuration", href: "/system-settings/configuration", icon: Server },
+    {
+      name: "System Configuration",
+      icon: Server,
+      items: [
+        { name: "General", href: "/system-settings/configuration", icon: Cog },
+        { name: "SMTP", href: "/system-settings/configuration/smtp", icon: Mail },
+        { name: "SMS", href: "/system-settings/configuration/sms", icon: MessageSquare },
+      ],
+    },
     { name: "Developer Settings", href: "/system-settings/developer", icon: Code },
   ];
 
