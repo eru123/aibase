@@ -127,7 +127,7 @@ At minimum, run what is relevant:
 - `pnpm lint`
 - `pnpm type-check`
 - `pnpm build` (for integration-level frontend confidence)
-- targeted PHP checks/tests where backend logic changed
+- vendor/bin/phpunit (targeted PHP checks/tests where backend logic changed)
 - migration dry reasoning (and local run if schema changed)
 
 If any check cannot run, document exactly why and what was used as fallback verification.
