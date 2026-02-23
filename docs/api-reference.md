@@ -1,21 +1,99 @@
-# AI Base API Reference
+# API Reference (Starter Baseline)
 
-AI Base exposes user system endpoints under `/api`.
+Base URL (local): `/api`
 
-## Authentication
+This is the baseline contract shipped with the starter template.
 
-- `GET /api/auth/admin-count`
-- `POST /api/auth/setup-admin`
-- `POST /api/auth/register`
-- `POST /api/auth/login`
-- `POST /api/auth/logout`
-- `POST /api/auth/refresh`
-- `GET /api/auth/me`
-- `POST /api/auth/invite`
-- `GET /api/auth/invitation`
-- `POST /api/auth/accept-invitation`
+## Authentication (`/api/auth`)
 
-## Profile
+Public:
+- `GET /admin-count`
+- `POST /setup-admin`
+- `POST /register`
+- `POST /verify-signup`
+- `POST /login`
+- `POST /refresh`
+- `GET /invitation`
+- `POST /accept-invitation`
+- `GET /verify-email`
+- `POST /forgot-password`
+- `POST /reset-password`
 
-- `GET /api/profile`
-- `PUT /api/profile`
+Authenticated:
+- `POST /logout`
+- `GET /me`
+
+Admin:
+- `POST /invite`
+
+## System settings (`/api/system-settings`)
+
+Public:
+- `GET /public`
+
+Admin:
+- `GET /security`
+- `PUT /security`
+- `PUT /company`
+- `GET /smtp`
+- `PUT /smtp`
+- `POST /smtp/test`
+
+## Email templates (`/api/email-templates`) — Admin
+
+- `GET /`
+- `POST /`
+- `GET /{id}`
+- `PUT /{id}`
+- `DELETE /{id}`
+- `POST /{id}/preview`
+
+## Emails (`/api/emails`) — Admin
+
+- `POST /send-template`
+- `POST /send-raw`
+
+## Uploads (`/api/uploads`) — Authenticated
+
+- `GET /`
+- `POST /`
+- `GET /{id}`
+- `PUT /{id}`
+- `DELETE /{id}`
+
+## Profile (`/api/profile`) — Authenticated
+
+- `GET /`
+- `PUT /`
+- `PUT /password`
+
+## Public user profile
+
+- `GET /api/u/{username}`
+
+## Users (`/api/users`) — Admin
+
+- `GET /`
+- `PUT /{id}`
+- `POST /{id}/approve`
+- `POST /{id}/reject`
+
+## Audit logs (`/api/audit-logs`) — Admin
+
+- `GET /`
+- `GET /{id}`
+
+## Authentication logs (`/api/authentication-logs`) — Authenticated
+
+- `GET /`
+
+## Error logs (`/api/error-logs`) — Admin
+
+- `GET /`
+- `GET /{id}`
+- `DELETE /{id}`
+
+## Notes
+
+- Unknown API routes return a standard 404 error payload.
+- Keep frontend data consumers aligned when changing response structures.

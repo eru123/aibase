@@ -1,34 +1,77 @@
-# Getting Started with AI Base
+# Getting Started (Starter Template)
 
-AI Base provides a user system with authentication and profile management.
+This guide gets AI Base running as a reusable starter template for local development.
 
-## Install Dependencies
+## Prerequisites
+
+- PHP 8.2+
+- Composer
+- Node.js 20+
+- pnpm 10+
+- MySQL 8+
+
+## 1) Install dependencies
 
 ```bash
 composer install
 pnpm install
 ```
 
-## Configure Environment
+## 2) Configure environment
 
 ```bash
 cp .env.example .env
 ```
 
-Update `.env` with database and SMTP settings. AI Base ships with sensible defaults for local development.
+Minimum settings to verify:
 
-## Initialize Database
+- `VITE_API_URL` (default local API URL)
+- `VITE_APP_URL` (default local frontend URL)
+- `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_PORT`
+
+Optional but recommended:
+
+- SMTP settings for invitation/reset email flows
+- Branding settings (`VITE_APP_NAME`, `VITE_APP_SHORT_NAME`, etc.)
+
+## 3) Initialize database
+
+Create database:
 
 ```bash
 mysql -u root -p -e "CREATE DATABASE aibase;"
-vendor/bin/phinx migrate
 ```
 
-## Run the App
+Run migrations:
 
 ```bash
-php -S localhost:8000 -t api
+pnpm db:migrate
+```
+
+## 4) Run locally
+
+```bash
 pnpm dev
 ```
 
-Open `http://localhost:5173` in your browser.
+The Vite dev setup also starts a PHP server for the backend.
+
+- Frontend: `http://localhost:5173`
+- API: `http://127.0.0.1:8000/api`
+
+## 5) Build confidence checks
+
+```bash
+pnpm lint
+pnpm type-check
+pnpm build
+```
+
+## 6) Starter-template adaptation
+
+Before building domain features, align these template defaults:
+
+1. Branding labels and app names in `.env`.
+2. Default admin onboarding flow and approval rules.
+3. SMTP transport strategy (`SMTP_MAIL` vs SMTP host credentials).
+4. Security settings defaults (session length, lockout behavior, etc.).

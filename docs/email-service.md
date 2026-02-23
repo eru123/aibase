@@ -1,8 +1,10 @@
-# AI Base Email Service
+# Email Service
 
-AI Base uses PHPMailer to deliver transactional email (MFA, invitations, password resets). Configure SMTP credentials in `.env`.
+AI Base uses PHPMailer for transactional email flows (invites, verification, password resets, notifications).
 
-Example `.env` values:
+## SMTP configuration
+
+Set values in `.env`:
 
 ```bash
 SMTP_HOST=email-smtp.example.com
@@ -15,4 +17,10 @@ SMTP_SENDER_EMAIL=no-reply@aibase.local
 SMTP_MAIL=false
 ```
 
-Set `SMTP_MAIL=true` to use PHP's built-in `mail()` transport instead of SMTP.
+`SMTP_MAIL=true` switches transport to PHP `mail()`.
+
+## Starter-template guidance
+
+- Replace sender identity with your product domain.
+- Confirm SPF/DKIM/DMARC on production domains.
+- Keep template variable naming stable across backend payloads and frontend preview tooling.
