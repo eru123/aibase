@@ -8,7 +8,7 @@ $count = max(1, min($count, 20)); // Limit between 1 and 20
 
 $gender = isset($options['gender']) ? $options['gender'] : null;
 
-$targetDir = __DIR__ . '/../../../uploads/downloaded_avatars';
+$targetDir = __DIR__ . '/../../uploads/downloaded_avatars';
 if (!is_dir($targetDir)) {
     mkdir($targetDir, 0755, true);
 }
