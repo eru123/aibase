@@ -24,9 +24,8 @@ echo <<<'MSG'
   2. Run database migrations:
      pnpm db:migrate
 
-  3. Start the development servers:
-     pnpm dev          → Frontend (Vite)
-     php -S localhost:8000   → Backend (PHP)
+  3. Start the development server:
+     pnpm dev          → Starts both Frontend (Vite) & Backend (PHP)
 
   4. Open in your browser:
      Frontend: http://localhost:5173
