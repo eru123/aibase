@@ -89,6 +89,31 @@ class Routes
             $emails->any('/(.*)?', [self::class , 'fallback']);
         });
 
+
+        // Customers (admin)
+        $api->group('/customers', function (Router $customers) use ($admin) {
+            $customers->use($admin);
+            $customers->get('/profiles', [CustomerProfileController::class , 'index']);
+            $customers->post('/profiles', [CustomerProfileController::class , 'store']);
+            $customers->put('/profiles/{id}', [CustomerProfileController::class , 'update']);
+            $customers->delete('/profiles/{id}', [CustomerProfileController::class , 'destroy']);
+
+            $customers->get('/groups', [CustomerGroupController::class , 'index']);
+            $customers->post('/groups', [CustomerGroupController::class , 'store']);
+            $customers->get('/groups/{id}', [CustomerGroupController::class , 'show']);
+            $customers->put('/groups/{id}', [CustomerGroupController::class , 'update']);
+            $customers->delete('/groups/{id}', [CustomerGroupController::class , 'destroy']);
+
+            $customers->get('/marketing-templates', [MarketingEmailTemplateController::class , 'index']);
+            $customers->post('/marketing-templates', [MarketingEmailTemplateController::class , 'store']);
+            $customers->put('/marketing-templates/{id}', [MarketingEmailTemplateController::class , 'update']);
+            $customers->delete('/marketing-templates/{id}', [MarketingEmailTemplateController::class , 'destroy']);
+
+            $customers->post('/marketing-emails/queue', [MarketingEmailRequestController::class , 'queue']);
+            $customers->get('/marketing-emails/requests', [MarketingEmailRequestController::class , 'index']);
+            $customers->any('/(.*)?', [self::class , 'fallback']);
+        });
+
         // Uploads (auth required)
         $api->group('/uploads', function (Router $uploads) use ($auth) {
             $uploads->use($auth);
