@@ -27,7 +27,7 @@ Most teams lose time rebuilding the same platform concerns (auth, settings, logs
 ### 1) Create project
 
 ```bash
-composer create-project eru123/aibase my-app -s dev
+composer create-project eru123/opensys my-app -s dev
 cd my-app
 ```
 
@@ -42,7 +42,7 @@ Update `.env` as needed (database + app URLs + optional branding values).
 ### 3) Create database and run migrations
 
 ```bash
-mysql -u root -p -e "CREATE DATABASE aibase;"
+mysql -u root -p -e "CREATE DATABASE opensys;"
 pnpm db:migrate
 ```
 
@@ -57,7 +57,7 @@ pnpm dev
 ### 5) Open the app
 
 - Frontend: `http://localhost:5173`
-- API base: http://localhost:8000/api
+- API base: <http://localhost:8000/api>
 
 ## Validation Commands
 

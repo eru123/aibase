@@ -226,7 +226,7 @@ class SystemSettingController extends BaseController
             $smtpService = new \Api\Services\SmtpService();
             $success = $smtpService->send(
                 $email,
-                'AIBase SMTP Configuration Test',
+                'OpenSys SMTP Configuration Test',
                 '<p>This is a test email sent from <strong>AIBase</strong> to verify that your SMTP configuration is working perfectly.</p>'
             );
 

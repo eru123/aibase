@@ -73,7 +73,7 @@ export function InviteAcceptance() {
         <Card>
           <CardHeader>
             <CardTitle>Accept invitation</CardTitle>
-            <CardDescription>Join your AIBase workspace.</CardDescription>
+            <CardDescription>Join your OpenSys workspace.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {status === 'loading' && <p className="text-sm text-gray-600">Loading invitation...</p>}
@@ -102,7 +102,7 @@ export function InviteAcceptance() {
 
                 <div className="space-y-2">
                   <label htmlFor="username" className="text-sm font-medium">Username</label>
-                  <Input id="username" {...register('username')} />
+                  <Input id="username" {...register('username')} autoComplete='username' />
                   {errors.username && <p className="text-xs text-red-600">{errors.username.message}</p>}
                 </div>
                 <div className="space-y-2">
@@ -111,6 +111,7 @@ export function InviteAcceptance() {
                     <Input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
                       className="pr-10"
                       {...register('password')}
                     />

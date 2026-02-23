@@ -13,9 +13,9 @@ return [
         'production' => [
             'adapter' => 'mysql',
             'host' => $_ENV['DB_HOST'] ?? 'localhost',
-            'name' => $_ENV['DB_NAME'] ?? 'aibase',
-            'user' => $_ENV['DB_USER'] ?? 'aibase',
-            'pass' => $_ENV['DB_PASS'] ?? 'aibase',
+            'name' => $_ENV['DB_NAME'] ?? 'opensys',
+            'user' => $_ENV['DB_USER'] ?? 'opensys',
+            'pass' => $_ENV['DB_PASS'] ?? 'opensys',
             'port' => $_ENV['DB_PORT'] ?? 3306,
             'charset' => 'utf8mb4',
         ],

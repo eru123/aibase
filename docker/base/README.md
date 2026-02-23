@@ -1,6 +1,6 @@
-# AIBase Base Docker Image
+# OpenSys Base Docker Image
 
-This is the base Docker image for AIBase applications. It includes:
+This is the base Docker image for OpenSys applications. It includes:
 
 - PHP 8.4 with Apache
 - Node.js 22.x with pnpm
@@ -11,13 +11,13 @@ This is the base Docker image for AIBase applications. It includes:
 ## Building the Image
 
 ```bash
-docker build -t eru123/aibase-base:latest .
-docker push eru123/aibase-base:latest
+docker build -t eru123/opensys-base:latest .
+docker push eru123/opensys-base:latest
 ```
 
 ## Versioning
 
-Tag format: `eru123/aibase-base:X.Y.Z`
+Tag format: `eru123/opensys-base:X.Y.Z`
 
 - Major version: Breaking changes
 - Minor version: New features/extensions

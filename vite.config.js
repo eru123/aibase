@@ -18,7 +18,7 @@ export default defineConfig({
   ],
   build: {
     assetsDir: "__",
-    rollupOptions: {
+    rolldownOptions: {
       output: {
         manualChunks: {
           react: ["react", "react-dom", "react-router-dom", "axios"],

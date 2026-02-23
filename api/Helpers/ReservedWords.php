@@ -18,7 +18,7 @@ class ReservedWords
         'settings',
         'organizations',
         'users',
-        'aibase',
+        'opensys',
         'dashboard',
         'profile',
         'home',

@@ -12,7 +12,7 @@ This guide gets AI Base running as a reusable starter template for local develop
 ## 1) Create project
 
 ```bash
-composer create-project eru123/aibase my-app -s dev
+composer create-project eru123/opensys my-app -s dev
 cd my-app
 ```
 
@@ -42,7 +42,7 @@ Optional but recommended:
 Create database:
 
 ```bash
-mysql -u root -p -e "CREATE DATABASE aibase;"
+mysql -u root -p -e "CREATE DATABASE opensys;"
 ```
 
 Run migrations:

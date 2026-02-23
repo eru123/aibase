@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "Starting AIBase Application Container..."
+echo "Starting OpenSys Application Container..."
 
 # Install pnpm dependencies if needed
 # if [ -f "package.json" ]; then

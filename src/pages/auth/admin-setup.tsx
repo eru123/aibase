@@ -125,7 +125,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                 Welcome to {brandingConfig.appName}
               </h1>
               <p className="text-sm text-muted-foreground sm:text-base">
-                Let&apos;s create your administrator account and set up AIBase Portal.
+                Let&apos;s create your administrator account and set up OpenSys Portal.
               </p>
             </div>
           </div>
@@ -140,7 +140,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                 Create the primary administrator account
               </CardTitle>
               <CardDescription className="text-center text-sm text-muted-foreground">
-                We&apos;ll use this information to configure your AIBase workspace. You can add more team members later.
+                We&apos;ll use this information to configure your OpenSys workspace. You can add more team members later.
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-8">
@@ -161,7 +161,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="admin@aibase.local" {...register('email')} />
+                      <Input id="email" type="email" placeholder="admin@opensys.local" {...register('email')} />
                       {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
                     </div>
                   </div>
@@ -183,6 +183,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                           id="password"
                           type={showPassword ? 'text' : 'password'}
                           placeholder="Minimum 7 characters"
+                          autoComplete="new-password"
                           className="pr-10"
                           {...register('password')}
                         />
@@ -202,6 +203,7 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                         <Input
                           id="confirmPassword"
                           type={showConfirmPassword ? 'text' : 'password'}
+                          autoComplete="new-password"
                           placeholder="Confirm password"
                           className="pr-10"
                           {...register('confirmPassword')}
