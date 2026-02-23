@@ -116,7 +116,7 @@ Think and execute with:
 ## 6) API Contract & State Synchronization Rules
 
 - Any backend response shape change requires frontend audit for impacted consumers.
-- Keep naming aligned across backend and frontend (`snake_case`/`camelCase` mapping must be explicit).
+- Keep naming aligned across backend and frontend (`snake_case`/`camelCase` mapping must be explicitly handled via transformers or documented conventions).
 - Preserve backward compatibility unless task explicitly permits breaking change.
 - For mutations, ensure cache invalidation/refetch logic is handled deliberately.
 
