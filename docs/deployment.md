@@ -1,33 +1,49 @@
-# AI Base Deployment Guide
+# Deployment Guide
 
-This guide summarizes a basic deployment flow for AI Base. Adjust infrastructure settings to meet your organization's security and compliance requirements.
+This document describes the baseline deployment flow for AI Base as a starter template.
 
-## Build Assets
+## 1) Build frontend assets
 
 ```bash
 pnpm build
 ```
 
-## Install Backend Dependencies
+## 2) Install backend dependencies
 
 ```bash
 composer install --no-dev --optimize-autoloader
 ```
 
-## Configure Environment
+## 3) Configure runtime environment
 
-Set environment values in `.env` (or your secrets manager):
+Set values in `.env` (or a secrets manager):
 
-- `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SENDER_NAME`, `SMTP_SENDER_EMAIL`, `SMTP_MAIL`
+- Core app: `VITE_API_URL`, `VITE_APP_URL`
+- Database: `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_PORT`
+- SMTP (if enabled): `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`, `SMTP_SENDER_NAME`, `SMTP_SENDER_EMAIL`, `SMTP_MAIL`
+- Optional branding: `VITE_APP_NAME`, `VITE_APP_SHORT_NAME`, `VITE_COMPANY_NAME`, `VITE_HOTEL_BRAND_NAME`
 
-## Run Migrations
+## 4) Run database migrations
 
 ```bash
-vendor/bin/phinx migrate
-vendor/bin/phinx seed:run -s OtpMethodsSeeder
+pnpm db:migrate
 ```
 
-## Web Server
+## 5) Serve the application
 
-Serve `index.php` from the project root, and ensure the `/api` directory is reachable for backend requests. The SPA fallback remains in `index.php`, so keep routing intact when configuring your web server.
+Serve the project root through PHP with `index.php` as the entry point so both API routes and SPA fallback routing work correctly.
+
+Example:
+
+```bash
+php -S 0.0.0.0:8000 index.php
+```
+
+In production, map your web server to route requests through `index.php` while serving static build assets from `dist/`.
+
+## 6) Post-deploy checks
+
+- Validate login, refresh token flow, and logout.
+- Validate admin-only routes are protected.
+- Validate email delivery paths (or graceful handling if SMTP disabled).
+- Validate migration version state in the target environment.

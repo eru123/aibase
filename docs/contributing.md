@@ -1,8 +1,8 @@
-# Contributing to AI Base
+# Contributing to AI Base Starter Template
 
-Thanks for your interest in contributing to AI Base! Please follow these guidelines to keep contributions consistent and secure.
+Thanks for contributing. Keep changes reviewable, secure, and production-conscious.
 
-## Development Setup
+## Local development flow
 
 1. Install dependencies:
 
@@ -11,29 +11,48 @@ Thanks for your interest in contributing to AI Base! Please follow these guideli
    pnpm install
    ```
 
-2. Run migrations and seeds:
+2. Configure environment:
 
    ```bash
-   vendor/bin/phinx migrate
-   vendor/bin/phinx seed:run -s OtpMethodsSeeder
+   cp .env.example .env
    ```
 
-3. Start the dev servers:
+3. Run migrations:
 
    ```bash
-   php -S localhost:8000 -t api
+   pnpm db:migrate
+   ```
+
+4. Run dev server:
+
+   ```bash
    pnpm dev
    ```
 
-## Standards
+## Engineering expectations
 
-- Keep user system and utilities in scope.
-- Use the existing confirm modal for destructive actions.
-- Add or update tests when changing business logic.
-- Avoid introducing security regressions; prefer parameterized queries and validated input.
+- Keep controller/service/model boundaries clean.
+- Reuse existing shared UI primitives and hooks.
+- Preserve API response contract compatibility unless intentionally versioned.
+- Validate server-side input and keep authz rules explicit.
+- Avoid dead code, duplicate logic, and unclear magic values.
 
-## Submitting Changes
+## Required checks before PR
 
-1. Create a feature branch.
-2. Commit with a clear message.
-3. Open a pull request describing changes and tests run.
+```bash
+pnpm lint
+pnpm type-check
+pnpm build
+```
+
+If backend logic is changed, run targeted backend verification and include command output in the PR notes.
+
+## Pull request quality bar
+
+Each PR should include:
+
+1. Problem statement
+2. Solution summary
+3. Risk assessment (security, data, compatibility, performance)
+4. Validation evidence (commands + outcomes)
+5. Follow-ups (if intentionally deferred)

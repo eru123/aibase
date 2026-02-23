@@ -1,8 +1,17 @@
-# AI Base Caching
+# Caching Notes
 
-AI Base uses a database-backed key-value store for caching and rate limits. The cache is designed for server-side performance and can be extended through the `CacheService` in `api/Services`.
+AI Base includes a database-backed key-value cache (`kv_store`) used for:
 
-## Notes
+- server-side caching,
+- request throttling/rate-limit state,
+- lightweight shared transient data.
 
-- Cache entries are scoped by key and can store JSON payloads.
-- Rate limiting uses the same key-value store to track activity windows.
+## Implementation
+
+- Cache operations are centralized in `api/Services/CacheService.php`.
+- Data is keyed and can store JSON payloads.
+- Expiry is managed in application logic to keep behavior explicit.
+
+## Starter-template guidance
+
+If your product needs high-throughput caching, you can keep the same service contract and swap the backend to Redis while preserving controller/service callers.
