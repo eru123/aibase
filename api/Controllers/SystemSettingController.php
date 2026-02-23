@@ -172,32 +172,49 @@ class SystemSettingController extends BaseController
 
     public function updateSmtpSettings(Context $ctx)
     {
+        $auth = $ctx->auth()->requireAdmin($ctx);
+        if ($auth !== true)
+            return $auth;
+
         $payload = $this->input();
 
         $settings = $payload['settings'] ?? $payload;
+        $email = isset($payload['email']) ? trim((string)$payload['email']) : '';
 
         if (!is_array($settings)) {
             return $this->badRequest($ctx, 'settings payload must be an object');
         }
 
-        $updated = [];
-        foreach (self::SMTP_DEFAULTS as $key => $default) {
-            if (!array_key_exists($key, $settings)) {
-                continue;
-            }
-            $raw = $settings[$key];
-            if (is_bool($default)) {
-                $normalized = SystemSetting::castBool($raw, $default);
-            }
-            else {
-                $normalized = $raw === null ? '' : (is_string($raw) ? trim($raw) : (string)$raw);
-            }
-            SystemSetting::upsertValue($key, $normalized);
-            $updated[$key] = $normalized;
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->badRequest($ctx, 'A valid test recipient email is required before saving SMTP settings');
         }
 
-        if (empty($updated)) {
+        $normalizedSettings = $this->extractNormalizedSmtpSettings($settings);
+
+        if (empty($normalizedSettings)) {
             return $this->badRequest($ctx, 'No valid settings provided');
+        }
+
+        try {
+            $smtpService = new \Api\Services\SmtpService($normalizedSettings);
+            $success = $smtpService->send(
+                $email,
+                'OpenSys SMTP Configuration Test',
+                '<p>This is a test email sent from <strong>AIBase</strong> to verify that your SMTP configuration is working perfectly.</p>'
+            );
+
+            if (!$success) {
+                return $this->badRequest($ctx, 'Failed to send test email. Settings were not saved.');
+            }
+        }
+        catch (\Throwable $e) {
+            return $this->badRequest($ctx, 'Failed to send test email. Settings were not saved. ' . $e->getMessage());
+        }
+
+        $updated = [];
+        foreach ($normalizedSettings as $key => $normalized) {
+            SystemSetting::upsertValue($key, $normalized);
+            $updated[$key] = $normalized;
         }
 
         $values = SystemSetting::getValues(array_keys(self::SMTP_DEFAULTS), self::SMTP_DEFAULTS);
@@ -205,6 +222,7 @@ class SystemSettingController extends BaseController
 
         return $this->ok($ctx, [
             'success' => true,
+            'message' => 'SMTP settings tested and saved successfully',
             'data' => $payload,
         ]);
     }
@@ -275,6 +293,26 @@ class SystemSettingController extends BaseController
                 $normalized[$key] = $value === null ? '' : (is_string($value) ? $value : (string)$value);
             }
         }
+        return $normalized;
+    }
+
+    private function extractNormalizedSmtpSettings(array $settings): array
+    {
+        $normalized = [];
+        foreach (self::SMTP_DEFAULTS as $key => $default) {
+            if (!array_key_exists($key, $settings)) {
+                continue;
+            }
+
+            $raw = $settings[$key];
+            if (is_bool($default)) {
+                $normalized[$key] = SystemSetting::castBool($raw, $default);
+                continue;
+            }
+
+            $normalized[$key] = $raw === null ? '' : (is_string($raw) ? trim($raw) : (string)$raw);
+        }
+
         return $normalized;
     }
 
