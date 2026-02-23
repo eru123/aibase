@@ -7,7 +7,6 @@ Build and maintain AI Base as a secure, high-performance, low-friction platform 
 - **Operational discipline**: every change should be reviewable, testable, and production-conscious.
 
 Think and execute with:
-Think and execute with:
 - **Pragmatism**: Prioritize performance and simplicity over overly complex or clever solutions.
 - **Intentional Design**: Aim for minimal, intentional UI with strong, user-friendly defaults.
 - **Code Hygiene**: Maintain clean code paths, remove dead files, and ensure clear ownership.
