@@ -277,6 +277,7 @@ export default function SystemSettingsConfigurationSmtpPage() {
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••••••"
                                         value={form.smtp_password}
+                                        autoComplete="password"
                                         onChange={(event) =>
                                             setForm((prev) => ({
                                                 ...prev,
