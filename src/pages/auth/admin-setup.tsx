@@ -156,12 +156,12 @@ export function AdminSetup({ onSetupComplete }: AdminSetupProps) {
                   <div className="grid gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="username">Username</Label>
-                      <Input id="username" placeholder="admin" {...register('username')} />
+                      <Input id="username" placeholder="admin" {...register('username')} autoComplete='username' />
                       {errors.username && <p className="text-xs text-destructive">{errors.username.message}</p>}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
-                      <Input id="email" type="email" placeholder="admin@opensys.local" {...register('email')} />
+                      <Input id="email" type="email" placeholder="admin@opensys.local" {...register('email')} autoComplete='email' />
                       {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
                     </div>
                   </div>
