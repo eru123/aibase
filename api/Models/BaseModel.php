@@ -255,6 +255,11 @@ class BaseModel implements \ArrayAccess
         return $this->attributes[$name] ?? null;
     }
 
+    public function __isset(string $name): bool
+    {
+        return isset($this->attributes[$name]);
+    }
+
     public function __set(string $name, $value): void
     {
         if (in_array($name, $this->fillable)) {
