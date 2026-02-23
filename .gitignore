@@ -30,7 +30,7 @@ composer.phar
 .phpunit.*
 
 # project specific files
-/uploads
-!uploads/.gitkeep
+/uploads/*
+!/uploads/.gitkeep
 .env
 test*
