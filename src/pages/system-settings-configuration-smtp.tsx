@@ -12,7 +12,9 @@ import {
     Input,
     Label,
     Switch,
+    Modal,
 } from "@/components/ui";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 
 interface SmtpSettings {
@@ -54,6 +56,12 @@ export default function SystemSettingsConfigurationSmtpPage() {
 
     const [form, setForm] = useState<SmtpSettings>(DEFAULT_SETTINGS);
     const [saving, setSaving] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    // Test email modal state
+    const [testModalOpen, setTestModalOpen] = useState(false);
+    const [testEmail, setTestEmail] = useState("");
+    const [testing, setTesting] = useState(false);
 
     useEffect(() => {
         if (settings) {
@@ -73,6 +81,26 @@ export default function SystemSettingsConfigurationSmtpPage() {
             );
         } finally {
             setSaving(false);
+        }
+    };
+
+    const handleTestEmail = async () => {
+        if (!testEmail) {
+            toast.error("Please enter an email address to send the test to.");
+            return;
+        }
+        setTesting(true);
+        try {
+            await axios.post("/api/system-settings/smtp/test", { email: testEmail });
+            toast.success("Test email sent effectively! Please check your inbox.");
+            setTestModalOpen(false);
+            setTestEmail("");
+        } catch (error: any) {
+            toast.error(
+                error.response?.data?.message || "Failed to send test email.",
+            );
+        } finally {
+            setTesting(false);
         }
     };
 
@@ -243,18 +271,33 @@ export default function SystemSettingsConfigurationSmtpPage() {
 
                             <div className="space-y-2">
                                 <Label htmlFor="smtp_password">Password</Label>
-                                <Input
-                                    id="smtp_password"
-                                    type="password"
-                                    placeholder="••••••••••••"
-                                    value={form.smtp_password}
-                                    onChange={(event) =>
-                                        setForm((prev) => ({
-                                            ...prev,
-                                            smtp_password: event.target.value,
-                                        }))
-                                    }
-                                />
+                                <div className="relative">
+                                    <Input
+                                        id="smtp_password"
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="••••••••••••"
+                                        value={form.smtp_password}
+                                        onChange={(event) =>
+                                            setForm((prev) => ({
+                                                ...prev,
+                                                smtp_password: event.target.value,
+                                            }))
+                                        }
+                                        className="pr-10"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900"
+                                        aria-label={showPassword ? "Hide password" : "Show password"}
+                                    >
+                                        {showPassword ? (
+                                            <EyeOff className="h-4 w-4" />
+                                        ) : (
+                                            <Eye className="h-4 w-4" />
+                                        )}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -306,13 +349,60 @@ export default function SystemSettingsConfigurationSmtpPage() {
                         </div>
                     )}
 
-                    <div className="pt-2">
+                    <div className="pt-4 flex flex-wrap items-center gap-3 border-t mt-6">
                         <Button onClick={handleSave} disabled={saving || isLoading}>
-                            {saving ? "Saving..." : "Save settings"}
+                            {saving ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Saving...
+                                </>
+                            ) : (
+                                "Save settings"
+                            )}
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => setTestModalOpen(true)}
+                            disabled={saving || isLoading}
+                        >
+                            Test Email
                         </Button>
                     </div>
                 </CardContent>
             </Card>
+
+            <Modal show={testModalOpen} onClose={() => setTestModalOpen(false)} sm>
+                <div className="space-y-4">
+                    <div>
+                        <h3 className="text-lg font-semibold text-gray-900">Send Test Email</h3>
+                        <p className="text-sm text-gray-600">
+                            Please save your settings before running a test to ensure the newest configuration is used.
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label htmlFor="test_email">Recipient Email</Label>
+                        <Input
+                            id="test_email"
+                            type="email"
+                            placeholder="tester@example.com"
+                            value={testEmail}
+                            onChange={(e) => setTestEmail(e.target.value)}
+                            disabled={testing}
+                        />
+                    </div>
+
+                    <div className="flex flex-wrap gap-3 justify-end pt-2">
+                        <Button variant="secondary" onClick={() => setTestModalOpen(false)} disabled={testing}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleTestEmail} disabled={testing || !testEmail}>
+                            {testing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                            Send Test
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
         </div>
     );
 }

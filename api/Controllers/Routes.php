@@ -7,7 +7,6 @@ namespace Api\Controllers;
 
 use Api\Router;
 use Api\Context;
-use Api\Controllers\MerchantController;
 
 class Routes
 {
@@ -63,6 +62,7 @@ class Routes
                     $r->put('/company', [SystemSettingController::class , 'updateCompanySettings']);
                     $r->get('/smtp', [SystemSettingController::class , 'getSmtpSettings']);
                     $r->put('/smtp', [SystemSettingController::class , 'updateSmtpSettings']);
+                    $r->post('/smtp/test', [SystemSettingController::class , 'testSmtp']);
                 }
                 );
 
@@ -144,21 +144,6 @@ class Routes
             $logs->get('/{id}', [ErrorLogController::class , 'show']);
             $logs->delete('/{id}', [ErrorLogController::class , 'destroy']);
             $logs->any('/(.*)?', [self::class , 'fallback']);
-        });
-
-        // Organizations (auth required)
-        $api->group('/organizations', function (Router $orgs) use ($auth) {
-            $orgs->use($auth);
-            $orgs->get('', [OrganizationController::class , 'index']);
-            $orgs->post('', [OrganizationController::class , 'store']);
-            $orgs->get('/{slug}', [OrganizationController::class , 'show']);
-            $orgs->put('/{slug}', [OrganizationController::class , 'update']);
-            $orgs->post('/{slug}/invite', [OrganizationController::class , 'invite']);
-            $orgs->put('/{slug}/users/{userId}', [OrganizationController::class , 'updateUser']);
-            $orgs->delete('/{slug}/users/{userId}', [OrganizationController::class , 'removeUser']);
-            $orgs->get('/{slug}/merchants', [MerchantController::class , 'index']);
-            $orgs->post('/{slug}/merchants', [MerchantController::class , 'store']);
-            $orgs->any('/(.*)?', [self::class , 'fallback']);
         });
 
         // Fall back route for api routes

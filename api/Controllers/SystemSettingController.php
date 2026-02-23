@@ -209,6 +209,37 @@ class SystemSettingController extends BaseController
         ]);
     }
 
+    public function testSmtp(Context $ctx)
+    {
+        $auth = $ctx->auth()->requireAdmin($ctx);
+        if ($auth !== true)
+            return $auth;
+
+        $payload = $this->input();
+        $email = $payload['email'] ?? '';
+
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->badRequest($ctx, 'A valid email address is required');
+        }
+
+        try {
+            $smtpService = new \Api\Services\SmtpService();
+            $success = $smtpService->send(
+                $email,
+                'AIBase SMTP Configuration Test',
+                '<p>This is a test email sent from <strong>AIBase</strong> to verify that your SMTP configuration is working perfectly.</p>'
+            );
+
+            if ($success) {
+                return $this->ok($ctx, ['success' => true, 'message' => 'Email sent successfully']);
+            }
+            return $this->badRequest($ctx, 'Failed to send test email');
+        }
+        catch (\Throwable $e) {
+            return $this->badRequest($ctx, 'Failed to send test email: ' . $e->getMessage());
+        }
+    }
+
     private function normalizeSecuritySettings(array $values): array
     {
         $normalized = [];
