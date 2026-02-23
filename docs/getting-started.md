@@ -6,16 +6,19 @@ This guide gets AI Base running as a reusable starter template for local develop
 
 - PHP 8.2+
 - Composer
-- Node.js 20+
-- pnpm 10+
+- Node.js 20+ (pnpm will be auto-installed via corepack or npm if not present)
 - MySQL 8+
 
-## 1) Install dependencies
+## 1) Create project
 
 ```bash
-composer install
-pnpm install
+composer create-project eru123/aibase my-app -s dev
+cd my-app
 ```
+
+This automatically installs Composer and pnpm dependencies, and creates your `.env` file.
+
+> **Already cloned the repo?** Just run `composer install` — it also triggers `pnpm install` automatically.
 
 ## 2) Configure environment
 
@@ -54,7 +57,7 @@ pnpm db:migrate
 pnpm dev
 ```
 
-The Vite dev setup also starts a PHP server for the backend.
+`pnpm dev` starts both the Vite frontend and the PHP backend server.
 
 - Frontend: `http://localhost:5173`
 - API: `http://127.0.0.1:8000/api`

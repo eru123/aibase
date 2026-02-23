@@ -3,6 +3,7 @@
 AI Base is a production-minded **starter template** for building internal platforms and SaaS control panels with a PHP 8.2+ API and a React + Vite + TypeScript frontend.
 
 It gives you a strong foundation out of the box:
+
 - Authentication + session management (login, refresh, logout, profile).
 - Admin onboarding + invitation flows.
 - System settings modules (security, SMTP, company).
@@ -23,18 +24,18 @@ Most teams lose time rebuilding the same platform concerns (auth, settings, logs
 
 ## Starter Quick Start
 
-### 1) Install dependencies
+### 1) Create project
 
 ```bash
-composer install
-pnpm install
+composer create-project eru123/aibase my-app -s dev
+cd my-app
 ```
+
+This automatically installs Composer and pnpm dependencies, and creates your `.env` file.
+
+> **Already cloned?** Just run `composer install` — it also triggers `pnpm install` automatically.
 
 ### 2) Configure environment
-
-```bash
-cp .env.example .env
-```
 
 Update `.env` as needed (database + app URLs + optional SMTP and branding values).
 
@@ -51,7 +52,7 @@ pnpm db:migrate
 pnpm dev
 ```
 
-`pnpm dev` starts Vite and automatically launches the PHP server used by the API.
+`pnpm dev` starts both the Vite frontend and the PHP backend server.
 
 ### 5) Open the app
 

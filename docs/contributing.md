@@ -4,14 +4,13 @@ Thanks for contributing. Keep changes reviewable, secure, and production-conscio
 
 ## Local development flow
 
-1. Install dependencies:
+1. Install dependencies (pnpm is installed automatically):
 
    ```bash
    composer install
-   pnpm install
    ```
 
-2. Configure environment:
+2. Configure environment (`.env` is auto-created on `composer create-project`, copy manually if cloned):
 
    ```bash
    cp .env.example .env
@@ -23,7 +22,7 @@ Thanks for contributing. Keep changes reviewable, secure, and production-conscio
    pnpm db:migrate
    ```
 
-4. Run dev server:
+4. Run dev server (starts both Vite frontend and PHP backend):
 
    ```bash
    pnpm dev
