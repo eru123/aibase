@@ -56,7 +56,7 @@ pnpm dev
 ### 5) Open the app
 
 - Frontend: `http://localhost:5173`
-- API base: `http://127.0.0.1:8000/api`
+- API base: http://localhost:8000/api
 
 ## Validation Commands
 
