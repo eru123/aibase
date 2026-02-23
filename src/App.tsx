@@ -33,6 +33,10 @@ const EmailSendRaw = lazy(() => import("./pages/email-send-raw"));
 const AuditLogs = lazy(() => import("./pages/audit-logs"));
 const AuthenticationLogs = lazy(() => import("./pages/authentication-logs"));
 const ErrorLogs = lazy(() => import("./pages/error-logs"));
+const CustomersProfiles = lazy(() => import("./pages/customers-profiles"));
+const CustomersGroups = lazy(() => import("./pages/customers-groups"));
+const CustomersMarketingEmails = lazy(() => import("./pages/customers-marketing-emails"));
+const CustomersEmailTracker = lazy(() => import("./pages/customers-email-tracker"));
 
 function App() {
   return (
@@ -163,6 +167,22 @@ function App() {
                 <ErrorLogs />
               </Suspense>
             }
+          />
+          <Route
+            path="customers/profiles"
+            element={<Suspense fallback={<div className="p-6">Loading...</div>}><CustomersProfiles /></Suspense>}
+          />
+          <Route
+            path="customers/groups"
+            element={<Suspense fallback={<div className="p-6">Loading...</div>}><CustomersGroups /></Suspense>}
+          />
+          <Route
+            path="customers/marketing-emails"
+            element={<Suspense fallback={<div className="p-6">Loading...</div>}><CustomersMarketingEmails /></Suspense>}
+          />
+          <Route
+            path="customers/email-tracker"
+            element={<Suspense fallback={<div className="p-6">Loading...</div>}><CustomersEmailTracker /></Suspense>}
           />
         </Route>
         <Route path="/system-settings" element={<SettingsLayout />}>
