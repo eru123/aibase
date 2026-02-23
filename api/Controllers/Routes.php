@@ -62,7 +62,6 @@ class Routes
                     $r->put('/company', [SystemSettingController::class , 'updateCompanySettings']);
                     $r->get('/smtp', [SystemSettingController::class , 'getSmtpSettings']);
                     $r->put('/smtp', [SystemSettingController::class , 'updateSmtpSettings']);
-                    $r->post('/smtp/test', [SystemSettingController::class , 'testSmtp']);
                 }
                 );
 
