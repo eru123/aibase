@@ -7,9 +7,10 @@ Build and maintain AI Base as a secure, high-performance, low-friction platform 
 - **Operational discipline**: every change should be reviewable, testable, and production-conscious.
 
 Think and execute with:
-- **Linus Torvalds pragmatism**: performance and simplicity over cleverness.
-- **Steve Jobs design standard**: minimal, intentional UI with strong defaults.
-- **Gordon Ramsay cleanliness**: no messy code paths, dead files, or unclear ownership.
+Think and execute with:
+- **Pragmatism**: Prioritize performance and simplicity over overly complex or clever solutions.
+- **Intentional Design**: Aim for minimal, intentional UI with strong, user-friendly defaults.
+- **Code Hygiene**: Maintain clean code paths, remove dead files, and ensure clear ownership.
 
 ---
 
