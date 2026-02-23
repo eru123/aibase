@@ -5,20 +5,20 @@ description: Send an email using PHPMailer
 
 # Send Email
 
-This skill allows you to send emails using a PHP script that leverages the project's existing PHPMailer dependency and configuration.
+This skill sends emails using the project's `SmtpService`, which reads SMTP configuration from the database (System Settings).
 
 ## Prerequisites
 
 - PHP installed
 - Dependencies installed via `composer install`
-- `.env` file configured with SMTP settings
+- SMTP configured via the System Settings admin panel
 
 ## Usage
 
-Run the `send_email.php` script from the project root or skill directory:
+Run the `send_email.php` script from the project root:
 
 ```bash
-php .antigravity/skills/send_email/send_email.php --to="recipient@example.com" --subject="Test Subject" --body="<h1>Hello via PHPMailer</h1>"
+php skills/send_email/send_email.php --to="recipient@example.com" --subject="Test Subject" --body="<h1>Hello via PHPMailer</h1>"
 ```
 
 ## Arguments
@@ -26,4 +26,4 @@ php .antigravity/skills/send_email/send_email.php --to="recipient@example.com" -
 - `--to`: Email address of the recipient (required)
 - `--subject`: Subject line of the email (required)
 - `--body`: HTML body of the email (required)
-- `--from`: Sender email (optional, defaults to SMTP_SENDER_EMAIL in .env)
+- `--from`: Sender email (optional, defaults to sender configured in System Settings)

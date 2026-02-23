@@ -37,7 +37,7 @@ This automatically installs Composer and pnpm dependencies, and creates your `.e
 
 ### 2) Configure environment
 
-Update `.env` as needed (database + app URLs + optional SMTP and branding values).
+Update `.env` as needed (database + app URLs + optional branding values).
 
 ### 3) Create database and run migrations
 
@@ -89,7 +89,7 @@ When adapting this starter for your own product, do at least the following:
 1. Update branding vars in `.env` (`VITE_APP_NAME`, company labels, etc.).
 2. Review user roles/permissions in backend services and UI route gating.
 3. Replace sample email template content with your product messaging.
-4. Confirm SMTP and security settings defaults for your environment.
+4. Configure SMTP settings via the System Settings admin panel.
 5. Add domain modules in `src/pages` + `api/Controllers|Services|Models` using current architecture boundaries.
 
 ## Documentation Index

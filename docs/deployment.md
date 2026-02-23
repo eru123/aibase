@@ -20,8 +20,8 @@ Set values in `.env` (or a secrets manager):
 
 - Core app: `VITE_API_URL`, `VITE_APP_URL`
 - Database: `DB_HOST`, `DB_NAME`, `DB_USER`, `DB_PASS`, `DB_PORT`
-- SMTP (if enabled): `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_SECURE`, `SMTP_SENDER_NAME`, `SMTP_SENDER_EMAIL`, `SMTP_MAIL`
 - Optional branding: `VITE_APP_NAME`, `VITE_APP_SHORT_NAME`, `VITE_COMPANY_NAME`, `VITE_HOTEL_BRAND_NAME`
+- SMTP: Configure via the System Settings admin panel after deployment
 
 ## 4) Run database migrations
 

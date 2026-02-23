@@ -19,7 +19,7 @@ echo <<<'MSG'
   ────────────────
 
   1. Configure your environment:
-     Edit the .env file with your database and SMTP settings.
+     Edit the .env file with your database and branding settings.
 
   2. Run database migrations:
      pnpm db:migrate

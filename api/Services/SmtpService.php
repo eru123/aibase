@@ -26,9 +26,7 @@ class SmtpService
 
     public function __construct()
     {
-        $this->useMail = $this->readEnvBool('SMTP_MAIL', false);
         $this->loadSettings();
-        $this->applyEnvFallbacks();
         if ($this->useSes || $this->useMail) {
             $this->useSmtp = false;
         }
@@ -63,17 +61,6 @@ class SmtpService
                 default => null
             };
         }
-    }
-
-    private function applyEnvFallbacks(): void
-    {
-        $this->host ??= $this->readEnv('SMTP_HOST');
-        $this->port ??= $this->readEnvInt('SMTP_PORT');
-        $this->username ??= $this->readEnv('SMTP_USER');
-        $this->password ??= $this->readEnv('SMTP_PASS');
-        $this->encryption ??= $this->normalizeEncryption($this->readEnv('SMTP_SECURE'));
-        $this->fromName ??= $this->readEnv('SMTP_SENDER_NAME');
-        $this->fromEmail ??= $this->readEnv('SMTP_SENDER_EMAIL');
     }
 
     /**

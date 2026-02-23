@@ -4,20 +4,15 @@ AI Base uses PHPMailer for transactional email flows (invites, verification, pas
 
 ## SMTP configuration
 
-Set values in `.env`:
+SMTP credentials are managed through the **System Settings** page in the admin panel (`/system-settings/smtp`). No environment variables are needed.
 
-```bash
-SMTP_HOST=email-smtp.example.com
-SMTP_PORT=465
-SMTP_USER=<YOUR_SMTP_USER>
-SMTP_PASS=<YOUR_SMTP_PASS>
-SMTP_SECURE=true
-SMTP_SENDER_NAME="AIBase"
-SMTP_SENDER_EMAIL=no-reply@aibase.local
-SMTP_MAIL=false
-```
+Settings available via the admin UI:
 
-`SMTP_MAIL=true` switches transport to PHP `mail()`.
+- SMTP Host, Port, Username, Password
+- Encryption (TLS/SSL/none)
+- Sender name and email
+- Use PHP `mail()` transport (overrides SMTP)
+- Use AWS SES transport (overrides SMTP)
 
 ## Starter-template guidance
 

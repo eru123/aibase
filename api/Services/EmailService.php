@@ -181,7 +181,6 @@ final class EmailService
         if (!is_string($companyName) || trim($companyName) === '') {
             $companyName = $this->readEnv('COMPANY_NAME')
                 ?? $this->readEnv('APP_NAME')
-                ?? $this->readEnv('SMTP_SENDER_NAME')
                 ?? $this->fallbackCompanyName();
         }
 

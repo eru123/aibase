@@ -34,7 +34,7 @@ Minimum settings to verify:
 
 Optional but recommended:
 
-- SMTP settings for invitation/reset email flows
+- SMTP: Configure via the System Settings admin panel after first login
 - Branding settings (`VITE_APP_NAME`, `VITE_APP_SHORT_NAME`, etc.)
 
 ## 3) Initialize database
@@ -76,5 +76,5 @@ Before building domain features, align these template defaults:
 
 1. Branding labels and app names in `.env`.
 2. Default admin onboarding flow and approval rules.
-3. SMTP transport strategy (`SMTP_MAIL` vs SMTP host credentials).
+3. SMTP settings via the System Settings admin panel.
 4. Security settings defaults (session length, lockout behavior, etc.).
