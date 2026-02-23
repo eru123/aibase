@@ -41,7 +41,14 @@ class User extends BaseModel
 
     protected function getHidden(): array
     {
-        return ['password_hash'];
+        return [
+            'password_hash',
+            'password_history',
+            'password_reset_token',
+            'password_reset_expires',
+            'email_verification_token',
+            'email_verification_expires',
+        ];
     }
     public function organizations(): array
     {
