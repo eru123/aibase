@@ -58,7 +58,7 @@ export default function SystemSettingsConfigurationSmtpPage() {
     const [saving, setSaving] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    // Test email modal state
+    // Test and save modal state
     const [testModalOpen, setTestModalOpen] = useState(false);
     const [testEmail, setTestEmail] = useState("");
     const [testing, setTesting] = useState(false);
@@ -69,37 +69,28 @@ export default function SystemSettingsConfigurationSmtpPage() {
         }
     }, [settings]);
 
-    const handleSave = async () => {
-        setSaving(true);
-        try {
-            await axios.put("/api/system-settings/smtp", { settings: form });
-            toast.success("SMTP settings updated");
-            queryClient.invalidateQueries({ queryKey: ["systemSettingsSmtp"] });
-        } catch (error: any) {
-            toast.error(
-                error.response?.data?.message || "Failed to update SMTP settings",
-            );
-        } finally {
-            setSaving(false);
-        }
-    };
-
-    const handleTestEmail = async () => {
+    const handleTestAndSave = async () => {
         if (!testEmail) {
             toast.error("Please enter an email address to send the test to.");
             return;
         }
+        setSaving(true);
         setTesting(true);
         try {
-            await axios.post("/api/system-settings/smtp/test", { email: testEmail });
-            toast.success("Test email sent effectively! Please check your inbox.");
+            await axios.put("/api/system-settings/smtp", {
+                settings: form,
+                email: testEmail,
+            });
+            toast.success("SMTP settings tested and saved successfully.");
+            queryClient.invalidateQueries({ queryKey: ["systemSettingsSmtp"] });
             setTestModalOpen(false);
             setTestEmail("");
         } catch (error: any) {
             toast.error(
-                error.response?.data?.message || "Failed to send test email.",
+                error.response?.data?.message || "Failed to test and save SMTP settings.",
             );
         } finally {
+            setSaving(false);
             setTesting(false);
         }
     };
@@ -277,6 +268,7 @@ export default function SystemSettingsConfigurationSmtpPage() {
                                         type={showPassword ? "text" : "password"}
                                         placeholder="••••••••••••"
                                         value={form.smtp_password}
+                                        autoComplete="password"
                                         onChange={(event) =>
                                             setForm((prev) => ({
                                                 ...prev,
@@ -350,22 +342,18 @@ export default function SystemSettingsConfigurationSmtpPage() {
                     )}
 
                     <div className="pt-4 flex flex-wrap items-center gap-3 border-t mt-6">
-                        <Button onClick={handleSave} disabled={saving || isLoading}>
-                            {saving ? (
-                                <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Saving...
-                                </>
-                            ) : (
-                                "Save settings"
-                            )}
-                        </Button>
                         <Button
-                            variant="secondary"
                             onClick={() => setTestModalOpen(true)}
                             disabled={saving || isLoading}
                         >
-                            Test Email
+                            {saving ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Testing & Saving...
+                                </>
+                            ) : (
+                                "Test & Save Settings"
+                            )}
                         </Button>
                     </div>
                 </CardContent>
@@ -374,9 +362,9 @@ export default function SystemSettingsConfigurationSmtpPage() {
             <Modal show={testModalOpen} onClose={() => setTestModalOpen(false)} sm>
                 <div className="space-y-4">
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900">Send Test Email</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">Test & Save SMTP Settings</h3>
                         <p className="text-sm text-gray-600">
-                            Please save your settings before running a test to ensure the newest configuration is used.
+                            Enter an email recipient to validate the current form credentials. Settings will only be saved after a successful test.
                         </p>
                     </div>
 
@@ -396,9 +384,9 @@ export default function SystemSettingsConfigurationSmtpPage() {
                         <Button variant="secondary" onClick={() => setTestModalOpen(false)} disabled={testing}>
                             Cancel
                         </Button>
-                        <Button onClick={handleTestEmail} disabled={testing || !testEmail}>
+                        <Button onClick={handleTestAndSave} disabled={testing || !testEmail}>
                             {testing && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Send Test
+                            Test & Save
                         </Button>
                     </div>
                 </div>

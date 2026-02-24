@@ -99,6 +99,16 @@ export function Sidebar({ isOpen, onClose }: SidebarProps): JSX.Element {
             { name: "Send Raw", href: "/emails/send-raw", icon: Send },
           ],
         },
+        {
+          name: "Customers",
+          icon: Users,
+          items: [
+            { name: "Customer Profiles", href: "/customers/profiles", icon: User },
+            { name: "Customer Groups", href: "/customers/groups", icon: Users },
+            { name: "Marketing Email", href: "/customers/marketing-emails", icon: Mail },
+            { name: "Email Tracker", href: "/customers/email-tracker", icon: FileText },
+          ],
+        },
         { name: "Settings", href: "/system-settings/company", icon: Settings },
         ...(showUIComponents
           ? [

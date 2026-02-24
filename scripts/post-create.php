@@ -2,7 +2,7 @@
 
 /**
  * Post-create-project instructions.
- * Displayed after `composer create-project eru123/aibase` completes.
+ * Displayed after `composer create-project eru123/opensys` completes.
  */
 
 declare(strict_types=1);
@@ -11,7 +11,7 @@ echo <<<'MSG'
 
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                              ║
-║   🚀  AIBase project created successfully!                   ║
+║   🚀  OpenSys project created successfully!                   ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 
@@ -32,7 +32,7 @@ echo <<<'MSG'
      API:      http://localhost:8000
 
   Documentation:
-     https://github.com/eru123/aibase
+     https://github.com/eru123/opensys
 
   Happy coding! 🎉
 

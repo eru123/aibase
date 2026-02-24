@@ -21,9 +21,9 @@ $query = $options['query'];
 
 try {
     $dbHost = $_ENV['DB_HOST'] ?? 'localhost';
-    $dbName = $_ENV['DB_NAME'] ?? 'aibase';
-    $dbUser = $_ENV['DB_USER'] ?? 'aibase';
-    $dbPass = $_ENV['DB_PASS'] ?? 'aibase';
+    $dbName = $_ENV['DB_NAME'] ?? 'opensys';
+    $dbUser = $_ENV['DB_USER'] ?? 'opensys';
+    $dbPass = $_ENV['DB_PASS'] ?? 'opensys';
     $dbPort = $_ENV['DB_PORT'] ?? 3306;
 
     $dsn = "mysql:host=$dbHost;port=$dbPort;dbname=$dbName;charset=utf8mb4";

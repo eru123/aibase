@@ -173,6 +173,7 @@ export function Login() {
                 <Input
                   id="identifier"
                   type="text"
+                  autoComplete="username"
                   placeholder="Enter your username or email"
                   {...register('identifier')}
                 />
@@ -189,6 +190,7 @@ export function Login() {
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
                     placeholder="Enter your password"
                     className="pr-10"
                     {...register('password')}

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Api\Services;
 
 use Api\Models\SystemSetting;
-use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
 /**
@@ -24,9 +23,17 @@ class SmtpService
     private bool $useSes = false;
     private bool $useSmtp = true;
 
-    public function __construct()
+    /**
+     * @param array<string, mixed>|null $runtimeSettings
+     */
+    public function __construct(?array $runtimeSettings = null)
     {
         $this->loadSettings();
+
+        if ($runtimeSettings !== null) {
+            $this->applySettings($runtimeSettings);
+        }
+
         if ($this->useSes || $this->useMail) {
             $this->useSmtp = false;
         }
@@ -49,17 +56,59 @@ class SmtpService
 
         foreach ($settings as $setting) {
             match ($setting['key']) {
-                'smtp_host' => $this->host = $setting['value'],
-                'smtp_port' => $this->port = (int)$setting['value'],
-                'smtp_username' => $this->username = $setting['value'],
-                'smtp_password' => $this->password = $setting['value'],
-                'smtp_encryption' => $this->encryption = $setting['value'],
-                'smtp_from_email' => $this->fromEmail = $setting['value'],
-                'smtp_from_name' => $this->fromName = $setting['value'],
+                'smtp_host' => $this->host = $this->normalizeString($setting['value']),
+                'smtp_port' => $this->port = $this->normalizeInt($setting['value']),
+                'smtp_username' => $this->username = $this->normalizeString($setting['value']),
+                'smtp_password' => $this->password = $this->normalizeString($setting['value']),
+                'smtp_encryption' => $this->encryption = $this->normalizeEncryption($this->normalizeString($setting['value'])),
+                'smtp_from_email' => $this->fromEmail = $this->normalizeString($setting['value']),
+                'smtp_from_name' => $this->fromName = $this->normalizeString($setting['value']),
                 'smtp_ses' => $this->useSes = SystemSetting::castBool($setting['value'], false),
                 'smtp_mail' => $this->useMail = SystemSetting::castBool($setting['value'], false),
                 default => null
             };
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $settings
+     */
+    private function applySettings(array $settings): void
+    {
+        if (array_key_exists('smtp_host', $settings)) {
+            $this->host = $this->normalizeString($settings['smtp_host']);
+        }
+
+        if (array_key_exists('smtp_port', $settings)) {
+            $this->port = $this->normalizeInt($settings['smtp_port']);
+        }
+
+        if (array_key_exists('smtp_username', $settings)) {
+            $this->username = $this->normalizeString($settings['smtp_username']);
+        }
+
+        if (array_key_exists('smtp_password', $settings)) {
+            $this->password = $this->normalizeString($settings['smtp_password']);
+        }
+
+        if (array_key_exists('smtp_encryption', $settings)) {
+            $this->encryption = $this->normalizeEncryption($this->normalizeString($settings['smtp_encryption']));
+        }
+
+        if (array_key_exists('smtp_from_email', $settings)) {
+            $this->fromEmail = $this->normalizeString($settings['smtp_from_email']);
+        }
+
+        if (array_key_exists('smtp_from_name', $settings)) {
+            $this->fromName = $this->normalizeString($settings['smtp_from_name']);
+        }
+
+        if (array_key_exists('smtp_ses', $settings)) {
+            $this->useSes = SystemSetting::castBool($settings['smtp_ses'], false);
+        }
+
+        if (array_key_exists('smtp_mail', $settings)) {
+            $this->useMail = SystemSetting::castBool($settings['smtp_mail'], false);
         }
     }
 
@@ -178,29 +227,27 @@ class SmtpService
             && $this->fromEmail !== null;
     }
 
-    private function readEnv(string $key): ?string
+    private function normalizeString(mixed $value): ?string
     {
-        $value = $_ENV[$key] ?? getenv($key);
-        if ($value === false || $value === null) {
+        if ($value === null) {
             return null;
         }
-        $trimmed = trim((string) $value);
+
+        $trimmed = trim((string)$value);
         return $trimmed === '' ? null : $trimmed;
     }
 
-    private function readEnvInt(string $key): ?int
+    private function normalizeInt(mixed $value): ?int
     {
-        $value = $this->readEnv($key);
-        if ($value === null || !is_numeric($value)) {
+        if ($value === null || $value === '') {
             return null;
         }
-        return (int) $value;
-    }
 
-    private function readEnvBool(string $key, bool $default = false): bool
-    {
-        $value = $_ENV[$key] ?? getenv($key);
-        return SystemSetting::castBool($value, $default);
+        if (!is_numeric($value)) {
+            return null;
+        }
+
+        return (int)$value;
     }
 
     private function normalizeEncryption(?string $value): ?string

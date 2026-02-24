@@ -1,12 +1,15 @@
 # AGENTS.md — General Agent Operating Guide for AI Base
 
 ## Mission
+
 Build and maintain AI Base as a secure, high-performance, low-friction platform with:
+
 - **Backend rigor (PHP 8.2+)**: explicit validation, predictable APIs, and safe data access.
 - **Frontend precision (React + Vite + TypeScript + Tailwind)**: type-safe state, elegant UX, and fast interactions.
 - **Operational discipline**: every change should be reviewable, testable, and production-conscious.
 
 Think and execute with:
+
 - **Pragmatism**: Prioritize performance and simplicity over overly complex or clever solutions.
 - **Intentional Design**: Aim for minimal, intentional UI with strong, user-friendly defaults.
 - **Code Hygiene**: Maintain clean code paths, remove dead files, and ensure clear ownership.
@@ -16,12 +19,14 @@ Think and execute with:
 ## 1) Project Reality Snapshot
 
 ### Core stack
+
 - **Frontend**: React 18, TypeScript, Vite, TailwindCSS, Radix UI, React Query, React Hook Form + Zod.
 - **Backend**: PHP API (PSR-4 under `api/`), service/controller/model layering.
 - **Database**: MySQL with Phinx migrations in `db/migrations`.
-- **Tooling**: ESLint, TypeScript compiler checks, PHPUnit config present.
+- **Tooling**: ESLint, TypeScript compiler checFks, PHPUnit config present.
 
 ### Important paths
+
 - `src/` — frontend pages, layouts, hooks, reusable UI components.
 - `api/Controllers` — request handling + route-level orchestration.
 - `api/Services` — business logic and cross-cutting concerns.
@@ -124,6 +129,7 @@ Think and execute with:
 ## 7) Quality Gates Before Merge
 
 At minimum, run what is relevant:
+
 - `pnpm lint`
 - `pnpm type-check`
 - `pnpm build` (for integration-level frontend confidence)
@@ -137,6 +143,7 @@ If any check cannot run, document exactly why and what was used as fallback veri
 ## 8) Pull Request Expectations
 
 Every PR should include:
+
 1. **Problem statement** (what user/business issue exists)
 2. **Solution summary** (what changed and architectural impact)
 3. **Risk assessment** (auth, data, compatibility, performance)
@@ -160,6 +167,7 @@ Keep PRs scoped and review-friendly. Large refactors must be justified with meas
 ## 10) Definition of Done
 
 A task is done when:
+
 - behavior is correct,
 - code is clean and maintainable,
 - contracts are preserved (or explicitly versioned/communicated),
