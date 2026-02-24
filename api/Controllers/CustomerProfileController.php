@@ -24,14 +24,14 @@ class CustomerProfileController extends BaseController
         $query = CustomerProfile::query()->select(['customer_profiles.*']);
         if ($search !== '') {
             $term = '%' . $search . '%';
-            $query->whereRaw('(customer_profiles.name LIKE ? OR customer_profiles.email LIKE ?)', [$term, $term]);
+            $query->whereRaw('(customer_profiles.first_name LIKE ? OR customer_profiles.last_name LIKE ? OR customer_profiles.company_name LIKE ? OR customer_profiles.email LIKE ? OR customer_profiles.phone LIKE ?)', [$term, $term, $term, $term, $term]);
         }
 
         $rows = $query->orderBy('customer_profiles.updated_at', 'desc')->limit($limit)->offset($offset)->get();
         $countQuery = CustomerProfile::query();
         if ($search !== '') {
             $term = '%' . $search . '%';
-            $countQuery->whereRaw('(customer_profiles.name LIKE ? OR customer_profiles.email LIKE ?)', [$term, $term]);
+            $countQuery->whereRaw('(customer_profiles.first_name LIKE ? OR customer_profiles.last_name LIKE ? OR customer_profiles.company_name LIKE ? OR customer_profiles.email LIKE ? OR customer_profiles.phone LIKE ?)', [$term, $term, $term, $term, $term]);
         }
 
         return $this->ok($ctx, [
@@ -52,7 +52,11 @@ class CustomerProfileController extends BaseController
         }
 
         $data = $this->input();
-        $errors = $this->validate($data, ['name' => 'required', 'email' => 'required|email']);
+        $errors = $this->validate($data, [
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+        ]);
         if ($errors) {
             return $this->badRequest($ctx, 'Validation failed', $errors);
         }
@@ -62,7 +66,11 @@ class CustomerProfileController extends BaseController
         }
 
         $profile = new CustomerProfile([
-            'name' => trim((string)$data['name']),
+            'first_name' => trim((string)$data['first_name']),
+            'middle_name' => isset($data['middle_name']) ? trim((string)$data['middle_name']) : null,
+            'last_name' => trim((string)$data['last_name']),
+            'company_name' => isset($data['company_name']) ? trim((string)$data['company_name']) : null,
+            'phone' => isset($data['phone']) ? trim((string)$data['phone']) : null,
             'email' => trim((string)$data['email']),
             'is_active' => (int)(bool)($data['is_active'] ?? true),
         ]);
@@ -98,8 +106,20 @@ class CustomerProfileController extends BaseController
             $profile->email = $email;
         }
 
-        if (isset($data['name'])) {
-            $profile->name = trim((string)$data['name']);
+        if (isset($data['first_name'])) {
+            $profile->first_name = trim((string)$data['first_name']);
+        }
+        if (array_key_exists('middle_name', $data)) {
+            $profile->middle_name = $data['middle_name'] !== null ? trim((string)$data['middle_name']) : null;
+        }
+        if (isset($data['last_name'])) {
+            $profile->last_name = trim((string)$data['last_name']);
+        }
+        if (array_key_exists('company_name', $data)) {
+            $profile->company_name = $data['company_name'] !== null ? trim((string)$data['company_name']) : null;
+        }
+        if (array_key_exists('phone', $data)) {
+            $profile->phone = $data['phone'] !== null ? trim((string)$data['phone']) : null;
         }
         if (array_key_exists('is_active', $data)) {
             $profile->is_active = (int)(bool)$data['is_active'];

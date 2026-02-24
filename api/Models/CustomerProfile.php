@@ -12,7 +12,11 @@ class CustomerProfile extends BaseModel
     {
         return [
             'id',
-            'name',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'company_name',
+            'phone',
             'email',
             'is_active',
             'created_at',
