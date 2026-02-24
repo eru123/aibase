@@ -182,7 +182,7 @@ export default function OnboardingPage() {
 
   if (user.role !== "admin") {
     return (
-      <div className="space-y-4 max-w-3xl mx-auto">
+      <div className="space-y-4 max-w-2xl mx-auto">
         <div>
           <h2 className="text-2xl font-semibold text-gray-900">Onboarding</h2>
           <p className="text-sm text-gray-600">
@@ -202,7 +202,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-2xl mx-auto">
       <div>
         <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
           Onboarding

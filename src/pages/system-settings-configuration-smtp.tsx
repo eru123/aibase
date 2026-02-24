@@ -107,7 +107,7 @@ export default function SystemSettingsConfigurationSmtpPage() {
 
   if (user.role !== "admin") {
     return (
-      <div className="space-y-4 max-w-3xl mx-auto">
+      <div className="space-y-4 max-w-2xl mx-auto">
         <div>
           <h2 className="text-2xl font-semibold text-gray-900">Settings</h2>
           <p className="text-sm text-gray-600">
@@ -127,7 +127,7 @@ export default function SystemSettingsConfigurationSmtpPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-2xl mx-auto">
       <div>
         <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
           SMTP Configuration
@@ -206,7 +206,7 @@ export default function SystemSettingsConfigurationSmtpPage() {
               className="grid gap-5 md:grid-cols-2"
               onSubmit={(e) => e.preventDefault()}
             >
-              <div className="space-y-2">
+              <div className="space-y-2 col-span-2">
                 <Label htmlFor="smtp_host">SMTP Host</Label>
                 <Input
                   id="smtp_host"
@@ -220,21 +220,8 @@ export default function SystemSettingsConfigurationSmtpPage() {
                   }
                 />
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="smtp_port">SMTP Port</Label>
-                <Input
-                  id="smtp_port"
-                  placeholder="587"
-                  value={form.smtp_port}
-                  onChange={(event) =>
-                    setForm((prev) => ({
-                      ...prev,
-                      smtp_port: event.target.value,
-                    }))
-                  }
-                />
-              </div>
+              {/* Empty div for grid alignment */}
+              {/* <div className="hidden md:block"></div> */}
 
               <div className="space-y-2">
                 <Label htmlFor="smtp_encryption">Encryption</Label>
@@ -266,9 +253,20 @@ export default function SystemSettingsConfigurationSmtpPage() {
                   Mismatched settings will cause connection timeouts!
                 </p>
               </div>
-
-              {/* Empty div for grid alignment */}
-              <div className="hidden md:block"></div>
+              <div className="space-y-2">
+                <Label htmlFor="smtp_port">SMTP Port</Label>
+                <Input
+                  id="smtp_port"
+                  placeholder="587"
+                  value={form.smtp_port}
+                  onChange={(event) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      smtp_port: event.target.value,
+                    }))
+                  }
+                />
+              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="smtp_username">Username</Label>

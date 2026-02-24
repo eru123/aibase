@@ -179,7 +179,7 @@ export default function EmailTemplatesPage() {
 
   if (!isAdmin) {
     return (
-      <div className="space-y-4 max-w-3xl mx-auto">
+      <div className="space-y-4 max-w-5xl mx-auto">
         <div>
           <h2 className="text-2xl font-semibold text-gray-900">
             Email Templates
@@ -200,7 +200,7 @@ export default function EmailTemplatesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-5xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">
