@@ -19,7 +19,7 @@ class SystemSettingController extends BaseController
         'show_ui_components' => false,
     ];
     private const COMPANY_DEFAULTS = [
-        'company_name' => 'AIBase',
+        'company_name' => 'OpenSys',
         'company_logo_url' => '',
         'company_email' => '',
         'company_phone' => '',
@@ -200,7 +200,7 @@ class SystemSettingController extends BaseController
             $success = $smtpService->send(
                 $email,
                 'OpenSys SMTP Configuration Test',
-                '<p>This is a test email sent from <strong>AIBase</strong> to verify that your SMTP configuration is working perfectly.</p>'
+                '<p>This is a test email sent from <strong>OpenSys</strong> to verify that your SMTP configuration is working perfectly.</p>'
             );
 
             if (!$success) {

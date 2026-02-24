@@ -81,7 +81,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","otpCode":"123456","expiryMinutes":10}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"userName":"Alex","otpCode":"123456","expiryMinutes":10}',
         1
     ),
     (
@@ -139,13 +139,13 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","deviceInfo":"Chrome on Windows","verificationUrl":"https://example.com/auth/verify-device?token=token"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"userName":"Alex","deviceInfo":"Chrome on Windows","verificationUrl":"https://example.com/auth/verify-device?token=token"}',
         1
     ),
     (
         'user_invitation',
         'User invitation email',
-        'You''re invited to AIBase',
+        'You''re invited to OpenSys',
         '<div style="background-color: #f6f9fc; padding: 40px 10px; font-family: -apple-system, BlinkMacSystemFont, ''Segoe UI'', Roboto, Helvetica, Arial, sans-serif;">
     <div style="max-width: 500px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);">
         <div style="padding: 30px; text-align: center; border-bottom: 1px solid #f0f0f0;">
@@ -193,7 +193,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"inviterText":"Alex","inviteUrl":"https://example.com/invite?token=token"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"inviterText":"Alex","inviteUrl":"https://example.com/invite?token=token"}',
         1
     ),
     (
@@ -247,7 +247,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"verificationUrl":"https://example.com/auth/verify-email?token=token"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"verificationUrl":"https://example.com/auth/verify-email?token=token"}',
         1
     ),
     (
@@ -304,7 +304,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"resetUrl":"https://example.com/auth/reset-password?token=token"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"resetUrl":"https://example.com/auth/reset-password?token=token"}',
         1
     )
 ON DUPLICATE KEY UPDATE

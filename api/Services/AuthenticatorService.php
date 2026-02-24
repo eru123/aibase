@@ -80,7 +80,7 @@ class AuthenticatorService
     /**
      * Get QR code provisioning URI
      */
-    public function getProvisioningUri(string $secret, string $accountName, string $issuer = 'AIBase'): string
+    public function getProvisioningUri(string $secret, string $accountName, string $issuer = 'OpenSys'): string
     {
         $params = [
             'secret' => $secret,

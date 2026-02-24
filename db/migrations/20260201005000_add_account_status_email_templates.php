@@ -63,7 +63,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
         1
     ),
     (
@@ -119,7 +119,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","loginUrl":"https://example.com/login","companyEmail":"support@example.com"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"userName":"Alex","loginUrl":"https://example.com/login","companyEmail":"support@example.com"}',
         1
     ),
     (
@@ -170,7 +170,7 @@ VALUES
     </div>
 </div>',
         NULL,
-        '{"companyName":"AIBase","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
+        '{"companyName":"OpenSys","currentYear":2026,"logoUrl":null,"userName":"Alex","companyEmail":"support@example.com"}',
         1
     )
 ON DUPLICATE KEY UPDATE

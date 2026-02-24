@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from "react";
 import {
   Badge,
   Button,
@@ -36,52 +36,64 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-} from '@/components/ui'
-import { DataTableFilterField } from '@/components/ui/data-table-toolbar'
-import { useAuth } from '@/lib/auth'
-import { useSystemSettings } from '@/hooks/useSystemSettings'
-import { Check, Eye, EyeOff, Loader2, Plus, Sparkles, Menu, Calendar, CreditCard, DollarSign } from 'lucide-react'
-
+} from "@/components/ui";
+import { DataTableFilterField } from "@/components/ui/data-table-toolbar";
+import { useAuth } from "@/lib/auth";
+import { useSystemSettings } from "@/hooks/useSystemSettings";
+import {
+  Check,
+  Eye,
+  EyeOff,
+  Loader2,
+  Plus,
+  Sparkles,
+  Menu,
+  Calendar,
+  CreditCard,
+  DollarSign,
+} from "lucide-react";
 
 type ExampleBlock = {
-  id: string
-  title: string
-  code: string
-  render: () => React.ReactNode
-  componentName: string
-  imports: string[]
-  setup?: string
-}
+  id: string;
+  title: string;
+  code: string;
+  render: () => React.ReactNode;
+  componentName: string;
+  imports: string[];
+  setup?: string;
+};
 
 type Section = {
-  id: string
-  title: string
-  description: string
-  blocks: ExampleBlock[]
-}
+  id: string;
+  title: string;
+  description: string;
+  blocks: ExampleBlock[];
+};
 
 const normalizeSnippet = (snippet: string): string => {
-  const trimmed = snippet.replace(/^\n/, '').replace(/\n\s*$/, '')
-  const lines = trimmed.split('\n')
+  const trimmed = snippet.replace(/^\n/, "").replace(/\n\s*$/, "");
+  const lines = trimmed.split("\n");
   const indents = lines
     .filter((line) => line.trim().length > 0)
-    .map((line) => line.match(/^\s*/)?.[0].length ?? 0)
-  const minIndent = indents.length > 0 ? Math.min(...indents) : 0
-  return lines.map((line) => line.slice(minIndent)).join('\n')
-}
+    .map((line) => line.match(/^\s*/)?.[0].length ?? 0);
+  const minIndent = indents.length > 0 ? Math.min(...indents) : 0;
+  return lines.map((line) => line.slice(minIndent)).join("\n");
+};
 
 const indentLines = (value: string, spaces: number): string => {
-  const padding = ' '.repeat(spaces)
+  const padding = " ".repeat(spaces);
   return value
-    .split('\n')
+    .split("\n")
     .map((line) => (line.length > 0 ? `${padding}${line}` : line))
-    .join('\n')
-}
+    .join("\n");
+};
 
 const buildSnippet = (block: ExampleBlock): string => {
-  const importBlock = block.imports.join('\n')
-  const body = indentLines(normalizeSnippet(block.code), 4)
-  const setupBlock = block.setup ? `${indentLines(block.setup.trim(), 2)}\n` : ''
+  const importBlock = block.imports.join("\n");
+  const body = indentLines(normalizeSnippet(block.code), 4);
+  const setupBlock = block.setup
+    ? `${indentLines(block.setup.trim(), 2)}\n`
+    : "";
 
   return `
 ${importBlock}
@@ -91,335 +103,583 @@ ${setupBlock}  return (
 ${body}
   )
 }
-`
-}
+`;
+};
 
 export default function UIComponentsPage() {
-  const { user } = useAuth()
-  const { data: systemSettings, isLoading } = useSystemSettings()
-  const [selectValue, setSelectValue] = useState('design')
-  const [multiDropdownValue, setMultiDropdownValue] = useState<string[]>(['alerts'])
-  const [modalOpen, setModalOpen] = useState(false)
-  const [lockedModalOpen, setLockedModalOpen] = useState(false)
-  const [showPasswordInput, setShowPasswordInput] = useState(false)
-  const [confirmOutcome, setConfirmOutcome] = useState<string | null>(null)
+  const { user } = useAuth();
+  const { data: systemSettings, isLoading } = useSystemSettings();
+  const [selectValue, setSelectValue] = useState("design");
+  const [multiDropdownValue, setMultiDropdownValue] = useState<string[]>([
+    "alerts",
+  ]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [lockedModalOpen, setLockedModalOpen] = useState(false);
+  const [showPasswordInput, setShowPasswordInput] = useState(false);
+  const [confirmOutcome, setConfirmOutcome] = useState<string | null>(null);
 
-  const invoices = useMemo(() => [
-    { id: '1', invoice: "INV001", status: "Paid", totalAmount: "$250.00", paymentMethod: "Credit Card", date: "2024-05-01" },
-    { id: '2', invoice: "INV002", status: "Pending", totalAmount: "$150.00", paymentMethod: "PayPal", date: "2024-05-02" },
-    { id: '3', invoice: "INV003", status: "Unpaid", totalAmount: "$350.00", paymentMethod: "Bank Transfer", date: "2024-05-03" },
-    { id: '4', invoice: "INV004", status: "Paid", totalAmount: "$450.00", paymentMethod: "Credit Card", date: "2024-05-05" },
-    { id: '5', invoice: "INV005", status: "Paid", totalAmount: "$550.00", paymentMethod: "PayPal", date: "2024-05-10" },
-    { id: '6', invoice: "INV006", status: "Paid", totalAmount: "$200.00", paymentMethod: "Bank Transfer", date: "2024-05-12" },
-    { id: '7', invoice: "INV007", status: "Unpaid", totalAmount: "$300.00", paymentMethod: "Credit Card", date: "2024-05-15" },
-    { id: '8', invoice: "INV008", status: "Pending", totalAmount: "$120.00", paymentMethod: "PayPal", date: "2024-05-18" },
-    { id: '9', invoice: "INV009", status: "Paid", totalAmount: "$500.00", paymentMethod: "Bank Transfer", date: "2024-05-20" },
-    { id: '10', invoice: "INV010", status: "Paid", totalAmount: "$600.00", paymentMethod: "Credit Card", date: "2024-05-22" },
-    { id: '11', invoice: "INV011", status: "Paid", totalAmount: "$250.00", paymentMethod: "Credit Card", date: "2024-05-25" },
-    { id: '12', invoice: "INV012", status: "Pending", totalAmount: "$150.00", paymentMethod: "PayPal", date: "2024-05-28" },
-    { id: '13', invoice: "INV013", status: "Unpaid", totalAmount: "$350.00", paymentMethod: "Bank Transfer", date: "2024-06-01" },
-    { id: '14', invoice: "INV014", status: "Paid", totalAmount: "$450.00", paymentMethod: "Credit Card", date: "2024-06-03" },
-    { id: '15', invoice: "INV015", status: "Paid", totalAmount: "$550.00", paymentMethod: "PayPal", date: "2024-06-05" },
-  ], [])
+  const invoices = useMemo(
+    () => [
+      {
+        id: "1",
+        invoice: "INV001",
+        status: "Paid",
+        totalAmount: "$250.00",
+        paymentMethod: "Credit Card",
+        date: "2024-05-01",
+      },
+      {
+        id: "2",
+        invoice: "INV002",
+        status: "Pending",
+        totalAmount: "$150.00",
+        paymentMethod: "PayPal",
+        date: "2024-05-02",
+      },
+      {
+        id: "3",
+        invoice: "INV003",
+        status: "Unpaid",
+        totalAmount: "$350.00",
+        paymentMethod: "Bank Transfer",
+        date: "2024-05-03",
+      },
+      {
+        id: "4",
+        invoice: "INV004",
+        status: "Paid",
+        totalAmount: "$450.00",
+        paymentMethod: "Credit Card",
+        date: "2024-05-05",
+      },
+      {
+        id: "5",
+        invoice: "INV005",
+        status: "Paid",
+        totalAmount: "$550.00",
+        paymentMethod: "PayPal",
+        date: "2024-05-10",
+      },
+      {
+        id: "6",
+        invoice: "INV006",
+        status: "Paid",
+        totalAmount: "$200.00",
+        paymentMethod: "Bank Transfer",
+        date: "2024-05-12",
+      },
+      {
+        id: "7",
+        invoice: "INV007",
+        status: "Unpaid",
+        totalAmount: "$300.00",
+        paymentMethod: "Credit Card",
+        date: "2024-05-15",
+      },
+      {
+        id: "8",
+        invoice: "INV008",
+        status: "Pending",
+        totalAmount: "$120.00",
+        paymentMethod: "PayPal",
+        date: "2024-05-18",
+      },
+      {
+        id: "9",
+        invoice: "INV009",
+        status: "Paid",
+        totalAmount: "$500.00",
+        paymentMethod: "Bank Transfer",
+        date: "2024-05-20",
+      },
+      {
+        id: "10",
+        invoice: "INV010",
+        status: "Paid",
+        totalAmount: "$600.00",
+        paymentMethod: "Credit Card",
+        date: "2024-05-22",
+      },
+      {
+        id: "11",
+        invoice: "INV011",
+        status: "Paid",
+        totalAmount: "$250.00",
+        paymentMethod: "Credit Card",
+        date: "2024-05-25",
+      },
+      {
+        id: "12",
+        invoice: "INV012",
+        status: "Pending",
+        totalAmount: "$150.00",
+        paymentMethod: "PayPal",
+        date: "2024-05-28",
+      },
+      {
+        id: "13",
+        invoice: "INV013",
+        status: "Unpaid",
+        totalAmount: "$350.00",
+        paymentMethod: "Bank Transfer",
+        date: "2024-06-01",
+      },
+      {
+        id: "14",
+        invoice: "INV014",
+        status: "Paid",
+        totalAmount: "$450.00",
+        paymentMethod: "Credit Card",
+        date: "2024-06-03",
+      },
+      {
+        id: "15",
+        invoice: "INV015",
+        status: "Paid",
+        totalAmount: "$550.00",
+        paymentMethod: "PayPal",
+        date: "2024-06-05",
+      },
+    ],
+    [],
+  );
 
-  const [tableSelected, setTableSelected] = useState<(string | number)[]>([])
-  const [tableSorting, setTableSorting] = useState<{ column: string, direction: 'asc' | 'desc' } | undefined>(undefined)
-  const [tablePagination, setTablePagination] = useState({ page: 1, limit: 5 })
-  const [tableSearch, setTableSearch] = useState("")
-  const [tableFilters, setTableFilters] = useState<Record<string, any>>({}) // Changed to any to support ranges
-  const [openCode, setOpenCode] = useState<Record<string, boolean>>({})
+  const [tableSelected, setTableSelected] = useState<(string | number)[]>([]);
+  const [tableSorting, setTableSorting] = useState<
+    { column: string; direction: "asc" | "desc" } | undefined
+  >(undefined);
+  const [tablePagination, setTablePagination] = useState({ page: 1, limit: 5 });
+  const [tableSearch, setTableSearch] = useState("");
+  const [tableFilters, setTableFilters] = useState<Record<string, any>>({}); // Changed to any to support ranges
+  const [openCode, setOpenCode] = useState<Record<string, boolean>>({});
 
   const filterFields: DataTableFilterField<any>[] = [
     {
-      label: 'Status',
-      value: 'status',
+      label: "Status",
+      value: "status",
       options: [
-        { label: 'Paid', value: 'paid' },
-        { label: 'Pending', value: 'pending' },
-        { label: 'Unpaid', value: 'unpaid' },
-      ]
+        { label: "Paid", value: "paid" },
+        { label: "Pending", value: "pending" },
+        { label: "Unpaid", value: "unpaid" },
+      ],
     },
     {
-      label: 'Method',
-      value: 'paymentMethod',
+      label: "Method",
+      value: "paymentMethod",
       options: [
-        { label: 'Credit Card', value: 'credit card', icon: CreditCard },
-        { label: 'PayPal', value: 'paypal', icon: DollarSign },
-        { label: 'Bank Transfer', value: 'bank transfer' },
-      ]
+        { label: "Credit Card", value: "credit card", icon: CreditCard },
+        { label: "PayPal", value: "paypal", icon: DollarSign },
+        { label: "Bank Transfer", value: "bank transfer" },
+      ],
     },
     {
-      label: 'Price',
-      value: 'totalAmount',
-      type: 'price-range',
+      label: "Price",
+      value: "totalAmount",
+      type: "price-range",
     },
     {
-      label: 'Date',
-      value: 'date',
-      type: 'daterange',
-    }
-  ]
+      label: "Date",
+      value: "date",
+      type: "daterange",
+    },
+  ];
 
-  const columns = useMemo<any[]>(() => [
-    { header: "Invoice", accessorKey: "invoice", className: "font-medium", enableSorting: true },
-    {
-      header: "Status",
-      enableSorting: true,
-      cell: (row: any) => (
-        <Badge variant={row.status === 'Paid' ? 'outline' : row.status === 'Unpaid' ? 'destructive' : 'subtle'}>
-          {row.status}
-        </Badge>
-      )
-    },
-    { header: "Method", accessorKey: "paymentMethod", enableSorting: true },
-    { header: "Date", accessorKey: "date", enableSorting: true },
-    { header: <div className="text-right">Amount</div>, accessorKey: "totalAmount", className: "text-right", enableSorting: true },
-  ], [])
+  const columns = useMemo<any[]>(
+    () => [
+      {
+        header: "Invoice",
+        accessorKey: "invoice",
+        className: "font-medium",
+        enableSorting: true,
+      },
+      {
+        header: "Status",
+        enableSorting: true,
+        cell: (row: any) => (
+          <Badge
+            variant={
+              row.status === "Paid"
+                ? "outline"
+                : row.status === "Unpaid"
+                  ? "destructive"
+                  : "subtle"
+            }
+          >
+            {row.status}
+          </Badge>
+        ),
+      },
+      { header: "Method", accessorKey: "paymentMethod", enableSorting: true },
+      { header: "Date", accessorKey: "date", enableSorting: true },
+      {
+        header: <div className="text-right">Amount</div>,
+        accessorKey: "totalAmount",
+        className: "text-right",
+        enableSorting: true,
+      },
+    ],
+    [],
+  );
 
   // Filter logic for mock data
   const filteredInvoices = useMemo(() => {
-    let data = [...invoices]
+    let data = [...invoices];
 
     if (tableSearch) {
-      data = data.filter(i =>
-        i.invoice.toLowerCase().includes(tableSearch.toLowerCase()) ||
-        i.paymentMethod.toLowerCase().includes(tableSearch.toLowerCase())
-      )
+      data = data.filter(
+        (i) =>
+          i.invoice.toLowerCase().includes(tableSearch.toLowerCase()) ||
+          i.paymentMethod.toLowerCase().includes(tableSearch.toLowerCase()),
+      );
     }
 
-    Object.keys(tableFilters).forEach(key => {
-      const filterValue = tableFilters[key]
+    Object.keys(tableFilters).forEach((key) => {
+      const filterValue = tableFilters[key];
 
       // Handle Price Range (Array [min, max])
-      if (key === 'totalAmount') {
-        const [min, max] = filterValue as [number | undefined, number | undefined]
+      if (key === "totalAmount") {
+        const [min, max] = filterValue as [
+          number | undefined,
+          number | undefined,
+        ];
         if (min !== undefined || max !== undefined) {
-          data = data.filter(i => {
-            const amount = parseFloat(i.totalAmount.replace('$', ''))
-            if (min !== undefined && amount < min) return false
-            if (max !== undefined && amount > max) return false
-            return true
-          })
+          data = data.filter((i) => {
+            const amount = parseFloat(i.totalAmount.replace("$", ""));
+            if (min !== undefined && amount < min) return false;
+            if (max !== undefined && amount > max) return false;
+            return true;
+          });
         }
       }
       // Handle Date Range (Array [start, end])
-      else if (key === 'date') {
-        const [start, end] = filterValue as [string | undefined, string | undefined]
+      else if (key === "date") {
+        const [start, end] = filterValue as [
+          string | undefined,
+          string | undefined,
+        ];
         if (start || end) {
-          data = data.filter(i => {
-            if (!i.date) return false
-            const rowDate = i.date // YYYY-MM-DD string comparisons work reliably
-            if (start && rowDate < start) return false
-            if (end && rowDate > end) return false
-            return true
-          })
+          data = data.filter((i) => {
+            if (!i.date) return false;
+            const rowDate = i.date; // YYYY-MM-DD string comparisons work reliably
+            if (start && rowDate < start) return false;
+            if (end && rowDate > end) return false;
+            return true;
+          });
         }
       }
       // Handle Set-based faceted filters
       else if (filterValue instanceof Set && filterValue.size > 0) {
-        data = data.filter(i => filterValue.has(i[key as keyof typeof i]?.toString().toLowerCase()))
+        data = data.filter((i) =>
+          filterValue.has(i[key as keyof typeof i]?.toString().toLowerCase()),
+        );
       }
-    })
+    });
 
     if (tableSorting) {
       data.sort((a, b) => {
-        const aValue = a[tableSorting.column as keyof typeof a]
-        const bValue = b[tableSorting.column as keyof typeof b]
-        if (aValue < bValue) return tableSorting.direction === 'asc' ? -1 : 1
-        if (aValue > bValue) return tableSorting.direction === 'asc' ? 1 : -1
-        return 0
-      })
+        const aValue = a[tableSorting.column as keyof typeof a];
+        const bValue = b[tableSorting.column as keyof typeof b];
+        if (aValue < bValue) return tableSorting.direction === "asc" ? -1 : 1;
+        if (aValue > bValue) return tableSorting.direction === "asc" ? 1 : -1;
+        return 0;
+      });
     }
 
-    return data
-  }, [tableSearch, tableSorting, tableFilters])
+    return data;
+  }, [tableSearch, tableSorting, tableFilters]);
 
   // Pagination logic
   const paginatedInvoices = useMemo(() => {
-    const start = (tablePagination.page - 1) * tablePagination.limit
-    return filteredInvoices.slice(start, start + tablePagination.limit)
-  }, [filteredInvoices, tablePagination])
+    const start = (tablePagination.page - 1) * tablePagination.limit;
+    return filteredInvoices.slice(start, start + tablePagination.limit);
+  }, [filteredInvoices, tablePagination]);
 
-  const runs = useMemo(() => [
-    { id: 'run-1', job: 'Payroll sync', status: 'Success', durationMinutes: 18, startTime: '08:15', runDate: '2024-05-02' },
-    { id: 'run-2', job: 'Invoice export', status: 'Running', durationMinutes: 6, startTime: '09:30', runDate: '2024-05-03' },
-    { id: 'run-3', job: 'Ledger rebuild', status: 'Failed', durationMinutes: 42, startTime: '10:45', runDate: '2024-05-04' },
-    { id: 'run-4', job: 'Usage snapshot', status: 'Success', durationMinutes: 12, startTime: '11:20', runDate: '2024-05-05' },
-    { id: 'run-5', job: 'Customer import', status: 'Success', durationMinutes: 28, startTime: '13:05', runDate: '2024-05-06' },
-    { id: 'run-6', job: 'Tax validation', status: 'Running', durationMinutes: 9, startTime: '14:10', runDate: '2024-05-07' },
-    { id: 'run-7', job: 'Overdue scan', status: 'Success', durationMinutes: 16, startTime: '15:40', runDate: '2024-05-08' },
-    { id: 'run-8', job: 'Charge retry', status: 'Failed', durationMinutes: 33, startTime: '16:25', runDate: '2024-05-09' },
-  ], [])
+  const runs = useMemo(
+    () => [
+      {
+        id: "run-1",
+        job: "Payroll sync",
+        status: "Success",
+        durationMinutes: 18,
+        startTime: "08:15",
+        runDate: "2024-05-02",
+      },
+      {
+        id: "run-2",
+        job: "Invoice export",
+        status: "Running",
+        durationMinutes: 6,
+        startTime: "09:30",
+        runDate: "2024-05-03",
+      },
+      {
+        id: "run-3",
+        job: "Ledger rebuild",
+        status: "Failed",
+        durationMinutes: 42,
+        startTime: "10:45",
+        runDate: "2024-05-04",
+      },
+      {
+        id: "run-4",
+        job: "Usage snapshot",
+        status: "Success",
+        durationMinutes: 12,
+        startTime: "11:20",
+        runDate: "2024-05-05",
+      },
+      {
+        id: "run-5",
+        job: "Customer import",
+        status: "Success",
+        durationMinutes: 28,
+        startTime: "13:05",
+        runDate: "2024-05-06",
+      },
+      {
+        id: "run-6",
+        job: "Tax validation",
+        status: "Running",
+        durationMinutes: 9,
+        startTime: "14:10",
+        runDate: "2024-05-07",
+      },
+      {
+        id: "run-7",
+        job: "Overdue scan",
+        status: "Success",
+        durationMinutes: 16,
+        startTime: "15:40",
+        runDate: "2024-05-08",
+      },
+      {
+        id: "run-8",
+        job: "Charge retry",
+        status: "Failed",
+        durationMinutes: 33,
+        startTime: "16:25",
+        runDate: "2024-05-09",
+      },
+    ],
+    [],
+  );
 
-  const [runSorting, setRunSorting] = useState<{ column: string, direction: 'asc' | 'desc' } | undefined>(undefined)
-  const [runPagination, setRunPagination] = useState({ page: 1, limit: 5 })
-  const [runSearch, setRunSearch] = useState("")
-  const [runFilters, setRunFilters] = useState<Record<string, any>>({})
+  const [runSorting, setRunSorting] = useState<
+    { column: string; direction: "asc" | "desc" } | undefined
+  >(undefined);
+  const [runPagination, setRunPagination] = useState({ page: 1, limit: 5 });
+  const [runSearch, setRunSearch] = useState("");
+  const [runFilters, setRunFilters] = useState<Record<string, any>>({});
 
   const runFilterFields: DataTableFilterField<any>[] = [
     {
-      label: 'Status',
-      value: 'status',
+      label: "Status",
+      value: "status",
       options: [
-        { label: 'Success', value: 'success' },
-        { label: 'Running', value: 'running' },
-        { label: 'Failed', value: 'failed' },
-      ]
+        { label: "Success", value: "success" },
+        { label: "Running", value: "running" },
+        { label: "Failed", value: "failed" },
+      ],
     },
     {
-      label: 'Duration (min)',
-      value: 'durationMinutes',
-      type: 'number-range',
+      label: "Duration (min)",
+      value: "durationMinutes",
+      type: "number-range",
     },
     {
-      label: 'Start time',
-      value: 'startTime',
-      type: 'time-range',
+      label: "Start time",
+      value: "startTime",
+      type: "time-range",
     },
     {
-      label: 'Run date',
-      value: 'runDate',
-      type: 'daterange',
-    }
-  ]
+      label: "Run date",
+      value: "runDate",
+      type: "daterange",
+    },
+  ];
 
-  const runColumns = useMemo<any[]>(() => [
-    { header: "Job", accessorKey: "job", className: "font-medium", enableSorting: true },
-    {
-      header: "Status",
-      enableSorting: true,
-      cell: (row: any) => (
-        <Badge variant={row.status === 'Failed' ? 'destructive' : row.status === 'Running' ? 'subtle' : 'outline'}>
-          {row.status}
-        </Badge>
-      )
-    },
-    {
-      header: "Duration",
-      accessorKey: "durationMinutes",
-      enableSorting: true,
-      cell: (row: any) => row.durationMinutes + "m"
-    },
-    { header: "Start Time", accessorKey: "startTime", enableSorting: true },
-    { header: "Run Date", accessorKey: "runDate", enableSorting: true },
-  ], [])
+  const runColumns = useMemo<any[]>(
+    () => [
+      {
+        header: "Job",
+        accessorKey: "job",
+        className: "font-medium",
+        enableSorting: true,
+      },
+      {
+        header: "Status",
+        enableSorting: true,
+        cell: (row: any) => (
+          <Badge
+            variant={
+              row.status === "Failed"
+                ? "destructive"
+                : row.status === "Running"
+                  ? "subtle"
+                  : "outline"
+            }
+          >
+            {row.status}
+          </Badge>
+        ),
+      },
+      {
+        header: "Duration",
+        accessorKey: "durationMinutes",
+        enableSorting: true,
+        cell: (row: any) => row.durationMinutes + "m",
+      },
+      { header: "Start Time", accessorKey: "startTime", enableSorting: true },
+      { header: "Run Date", accessorKey: "runDate", enableSorting: true },
+    ],
+    [],
+  );
 
   const filteredRuns = useMemo(() => {
-    let data = [...runs]
+    let data = [...runs];
 
     if (runSearch) {
-      data = data.filter(run =>
-        run.job.toLowerCase().includes(runSearch.toLowerCase()) ||
-        run.status.toLowerCase().includes(runSearch.toLowerCase())
-      )
+      data = data.filter(
+        (run) =>
+          run.job.toLowerCase().includes(runSearch.toLowerCase()) ||
+          run.status.toLowerCase().includes(runSearch.toLowerCase()),
+      );
     }
 
-    Object.keys(runFilters).forEach(key => {
-      const filterValue = runFilters[key]
+    Object.keys(runFilters).forEach((key) => {
+      const filterValue = runFilters[key];
 
-      if (key === 'durationMinutes') {
-        const [min, max] = filterValue as [number | undefined, number | undefined]
+      if (key === "durationMinutes") {
+        const [min, max] = filterValue as [
+          number | undefined,
+          number | undefined,
+        ];
         if (min !== undefined || max !== undefined) {
-          data = data.filter(run => {
-            const duration = Number(run.durationMinutes)
-            if (min !== undefined && duration < min) return false
-            if (max !== undefined && duration > max) return false
-            return true
-          })
+          data = data.filter((run) => {
+            const duration = Number(run.durationMinutes);
+            if (min !== undefined && duration < min) return false;
+            if (max !== undefined && duration > max) return false;
+            return true;
+          });
         }
-      } else if (key === 'runDate') {
-        const [start, end] = filterValue as [string | undefined, string | undefined]
+      } else if (key === "runDate") {
+        const [start, end] = filterValue as [
+          string | undefined,
+          string | undefined,
+        ];
         if (start || end) {
-          data = data.filter(run => {
-            const rowDate = run.runDate
-            if (start && rowDate < start) return false
-            if (end && rowDate > end) return false
-            return true
-          })
+          data = data.filter((run) => {
+            const rowDate = run.runDate;
+            if (start && rowDate < start) return false;
+            if (end && rowDate > end) return false;
+            return true;
+          });
         }
-      } else if (key === 'startTime') {
-        const [start, end] = filterValue as [string | undefined, string | undefined]
+      } else if (key === "startTime") {
+        const [start, end] = filterValue as [
+          string | undefined,
+          string | undefined,
+        ];
         if (start || end) {
-          data = data.filter(run => {
-            const rowTime = run.startTime
-            if (start && rowTime < start) return false
-            if (end && rowTime > end) return false
-            return true
-          })
+          data = data.filter((run) => {
+            const rowTime = run.startTime;
+            if (start && rowTime < start) return false;
+            if (end && rowTime > end) return false;
+            return true;
+          });
         }
       } else if (filterValue instanceof Set && filterValue.size > 0) {
-        data = data.filter(run => filterValue.has(run[key as keyof typeof run]?.toString().toLowerCase()))
+        data = data.filter((run) =>
+          filterValue.has(
+            run[key as keyof typeof run]?.toString().toLowerCase(),
+          ),
+        );
       }
-    })
+    });
 
     if (runSorting) {
       data.sort((a, b) => {
-        const aValue = a[runSorting.column as keyof typeof a]
-        const bValue = b[runSorting.column as keyof typeof b]
-        if (aValue < bValue) return runSorting.direction === 'asc' ? -1 : 1
-        if (aValue > bValue) return runSorting.direction === 'asc' ? 1 : -1
-        return 0
-      })
+        const aValue = a[runSorting.column as keyof typeof a];
+        const bValue = b[runSorting.column as keyof typeof b];
+        if (aValue < bValue) return runSorting.direction === "asc" ? -1 : 1;
+        if (aValue > bValue) return runSorting.direction === "asc" ? 1 : -1;
+        return 0;
+      });
     }
 
-    return data
-  }, [runs, runSearch, runSorting, runFilters])
+    return data;
+  }, [runs, runSearch, runSorting, runFilters]);
 
   const paginatedRuns = useMemo(() => {
-    const start = (runPagination.page - 1) * runPagination.limit
-    return filteredRuns.slice(start, start + runPagination.limit)
-  }, [filteredRuns, runPagination])
+    const start = (runPagination.page - 1) * runPagination.limit;
+    return filteredRuns.slice(start, start + runPagination.limit);
+  }, [filteredRuns, runPagination]);
 
   const navLinks = [
-    { id: 'buttons', label: 'Buttons' },
-    { id: 'inputs', label: 'Inputs' },
-    { id: 'textarea', label: 'Textarea' },
-    { id: 'badges', label: 'Badges' },
-    { id: 'cards', label: 'Cards' },
-    { id: 'switches', label: 'Switches' },
-    { id: 'selects', label: 'Select' },
-    { id: 'tabs', label: 'Tabs' },
-    { id: 'dropdowns', label: 'Dropdown' },
-    { id: 'modals', label: 'Modal' },
-    { id: 'table', label: 'Table' },
-  ]
+    { id: "buttons", label: "Buttons" },
+    { id: "inputs", label: "Inputs" },
+    { id: "textarea", label: "Textarea" },
+    { id: "badges", label: "Badges" },
+    { id: "cards", label: "Cards" },
+    { id: "switches", label: "Switches" },
+    { id: "selects", label: "Select" },
+    { id: "tabs", label: "Tabs" },
+    { id: "dropdowns", label: "Dropdown" },
+    { id: "modals", label: "Modal" },
+    { id: "table", label: "Table" },
+  ];
 
   const dropdownOptions = useMemo<DropdownOption[]>(
     () => [
-      { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
-      { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
-      { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-      { value: 'opensys', label: 'AIBase', description: 'Invoices and usage', disabled: true },
+      {
+        value: "alerts",
+        label: "Alerts",
+        description: "Activity and system notices",
+      },
+      { value: "reports", label: "Reports", description: "Monthly rollups" },
+      {
+        value: "exports",
+        label: "Exports",
+        description: "CSV + PDF deliveries",
+      },
+      {
+        value: "opensys",
+        label: "OpenSys",
+        description: "Invoices and usage",
+        disabled: true,
+      },
     ],
-    []
-  )
+    [],
+  );
 
   const runConfirm = useCallback(
-    async (type?: 'success' | 'warning' | 'danger' | 'error' | 'info') => {
-      const label = type ? `${type.charAt(0).toUpperCase()}${type.slice(1)}` : 'Default'
+    async (type?: "success" | "warning" | "danger" | "error" | "info") => {
+      const label = type
+        ? `${type.charAt(0).toUpperCase()}${type.slice(1)}`
+        : "Default";
       const confirmed = await confirmModal({
         title: `${label} confirmation`,
-        message: 'This action will update app preferences.',
-        confirmText: 'Confirm',
-        cancelText: 'Cancel',
+        message: "This action will update app preferences.",
+        confirmText: "Confirm",
+        cancelText: "Cancel",
         type,
-      })
-      setConfirmOutcome(`${label}: ${confirmed ? 'Confirmed' : 'Cancelled'}`)
+      });
+      setConfirmOutcome(`${label}: ${confirmed ? "Confirmed" : "Cancelled"}`);
     },
-    [confirmModal, setConfirmOutcome]
-  )
+    [confirmModal, setConfirmOutcome],
+  );
 
   const sections = useMemo<Section[]>(
     () => [
       {
-        id: 'buttons',
-        title: 'Buttons',
-        description: 'Entry: use buttons for actions and navigation.',
+        id: "buttons",
+        title: "Buttons",
+        description: "Entry: use buttons for actions and navigation.",
         blocks: [
           {
-            id: 'buttons-variants',
-            title: 'Variants',
-            componentName: 'ButtonsVariantsExample',
+            id: "buttons-variants",
+            title: "Variants",
+            componentName: "ButtonsVariantsExample",
             imports: ["import { Button } from '@/components/ui'"],
             code: `
 <div className="flex flex-wrap gap-3">
@@ -443,10 +703,13 @@ export default function UIComponentsPage() {
             ),
           },
           {
-            id: 'buttons-sizes',
-            title: 'Sizes + Icons',
-            componentName: 'ButtonSizesExample',
-            imports: ["import { Button } from '@/components/ui'", "import { Plus } from 'lucide-react'"],
+            id: "buttons-sizes",
+            title: "Sizes + Icons",
+            componentName: "ButtonSizesExample",
+            imports: [
+              "import { Button } from '@/components/ui'",
+              "import { Plus } from 'lucide-react'",
+            ],
             code: `
 <div className="flex flex-wrap items-center gap-3">
   <Button size="sm">Small</Button>
@@ -473,14 +736,14 @@ export default function UIComponentsPage() {
         ],
       },
       {
-        id: 'inputs',
-        title: 'Inputs',
-        description: 'Entry: pair inputs with labels and helper text.',
+        id: "inputs",
+        title: "Inputs",
+        description: "Entry: pair inputs with labels and helper text.",
         blocks: [
           {
-            id: 'inputs-basic',
-            title: 'Basic inputs',
-            componentName: 'InputsBasicExample',
+            id: "inputs-basic",
+            title: "Basic inputs",
+            componentName: "InputsBasicExample",
             imports: ["import { Input, Label } from '@/components/ui'"],
             code: `
 <div className="space-y-4">
@@ -498,19 +761,27 @@ export default function UIComponentsPage() {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="example-email">Email</Label>
-                  <Input id="example-email" type="email" placeholder="you@opensys.local" />
+                  <Input
+                    id="example-email"
+                    type="email"
+                    placeholder="you@opensys.local"
+                  />
                 </div>
                 <div>
                   <Label htmlFor="example-password">Password</Label>
-                  <Input id="example-password" type="password" placeholder="********" />
+                  <Input
+                    id="example-password"
+                    type="password"
+                    placeholder="********"
+                  />
                 </div>
               </div>
             ),
           },
           {
-            id: 'inputs-password-toggle',
-            title: 'Password visibility',
-            componentName: 'PasswordInputExample',
+            id: "inputs-password-toggle",
+            title: "Password visibility",
+            componentName: "PasswordInputExample",
             imports: [
               "import { useState } from 'react'",
               "import { Input, Label } from '@/components/ui'",
@@ -547,7 +818,7 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
                 <div className="relative">
                   <Input
                     id="example-password-toggle"
-                    type={showPasswordInput ? 'text' : 'password'}
+                    type={showPasswordInput ? "text" : "password"}
                     placeholder="Enter a secure password"
                     className="pr-10"
                   />
@@ -555,9 +826,15 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
                     type="button"
                     onClick={() => setShowPasswordInput((prev) => !prev)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-900"
-                    aria-label={showPasswordInput ? 'Hide password' : 'Show password'}
+                    aria-label={
+                      showPasswordInput ? "Hide password" : "Show password"
+                    }
                   >
-                    {showPasswordInput ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPasswordInput ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
                 <p className="text-xs text-gray-500">Use 8+ characters.</p>
@@ -565,9 +842,9 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
             ),
           },
           {
-            id: 'inputs-states',
-            title: 'States',
-            componentName: 'InputStatesExample',
+            id: "inputs-states",
+            title: "States",
+            componentName: "InputStatesExample",
             imports: ["import { Input, Label } from '@/components/ui'"],
             code: `
 <div className="space-y-4">
@@ -595,11 +872,17 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
                     className="border-red-400 focus-visible:ring-red-400"
                     placeholder="Invalid value"
                   />
-                  <p className="mt-1 text-xs text-red-500">Please enter a valid value.</p>
+                  <p className="mt-1 text-xs text-red-500">
+                    Please enter a valid value.
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="example-disabled">Disabled</Label>
-                  <Input id="example-disabled" disabled placeholder="Disabled input" />
+                  <Input
+                    id="example-disabled"
+                    disabled
+                    placeholder="Disabled input"
+                  />
                 </div>
               </div>
             ),
@@ -607,14 +890,14 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
         ],
       },
       {
-        id: 'textarea',
-        title: 'Textarea',
-        description: 'Entry: use textarea for longer messages or notes.',
+        id: "textarea",
+        title: "Textarea",
+        description: "Entry: use textarea for longer messages or notes.",
         blocks: [
           {
-            id: 'textarea-basic',
-            title: 'Example',
-            componentName: 'TextareaExample',
+            id: "textarea-basic",
+            title: "Example",
+            componentName: "TextareaExample",
             imports: ["import { Label, Textarea } from '@/components/ui'"],
             code: `
 <div className="space-y-4">
@@ -633,12 +916,23 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="example-message">Message</Label>
-                  <Textarea id="example-message" rows={4} placeholder="Share a brief summary..." />
-                  <p className="mt-1 text-xs text-gray-500">Markdown supported.</p>
+                  <Textarea
+                    id="example-message"
+                    rows={4}
+                    placeholder="Share a brief summary..."
+                  />
+                  <p className="mt-1 text-xs text-gray-500">
+                    Markdown supported.
+                  </p>
                 </div>
                 <div>
                   <Label htmlFor="example-disabled-textarea">Disabled</Label>
-                  <Textarea id="example-disabled-textarea" rows={3} disabled placeholder="Disabled textarea" />
+                  <Textarea
+                    id="example-disabled-textarea"
+                    rows={3}
+                    disabled
+                    placeholder="Disabled textarea"
+                  />
                 </div>
               </div>
             ),
@@ -646,14 +940,14 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
         ],
       },
       {
-        id: 'badges',
-        title: 'Badges',
-        description: 'Entry: show status, category, or emphasis.',
+        id: "badges",
+        title: "Badges",
+        description: "Entry: show status, category, or emphasis.",
         blocks: [
           {
-            id: 'badges-variants',
-            title: 'Variants',
-            componentName: 'BadgeVariantsExample',
+            id: "badges-variants",
+            title: "Variants",
+            componentName: "BadgeVariantsExample",
             imports: ["import { Badge } from '@/components/ui'"],
             code: `
 <div className="flex flex-wrap gap-3">
@@ -673,10 +967,13 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
             ),
           },
           {
-            id: 'badges-icons',
-            title: 'Icons',
-            componentName: 'BadgeIconExample',
-            imports: ["import { Badge } from '@/components/ui'", "import { Check, Sparkles } from 'lucide-react'"],
+            id: "badges-icons",
+            title: "Icons",
+            componentName: "BadgeIconExample",
+            imports: [
+              "import { Badge } from '@/components/ui'",
+              "import { Check, Sparkles } from 'lucide-react'",
+            ],
             code: `
 <div className="flex flex-wrap gap-3">
   <Badge leadingIcon={<Check className="h-3 w-3" />}>Verified</Badge>
@@ -687,8 +984,13 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
 `,
             render: () => (
               <div className="flex flex-wrap gap-3">
-                <Badge leadingIcon={<Check className="h-3 w-3" />}>Verified</Badge>
-                <Badge variant="subtle" trailingIcon={<Sparkles className="h-3 w-3" />}>
+                <Badge leadingIcon={<Check className="h-3 w-3" />}>
+                  Verified
+                </Badge>
+                <Badge
+                  variant="subtle"
+                  trailingIcon={<Sparkles className="h-3 w-3" />}
+                >
                   New
                 </Badge>
               </div>
@@ -697,14 +999,14 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
         ],
       },
       {
-        id: 'cards',
-        title: 'Cards',
-        description: 'Entry: combine header, content, and footer layouts.',
+        id: "cards",
+        title: "Cards",
+        description: "Entry: combine header, content, and footer layouts.",
         blocks: [
           {
-            id: 'cards-samples',
-            title: 'Layout',
-            componentName: 'CardLayoutsExample',
+            id: "cards-samples",
+            title: "Layout",
+            componentName: "CardLayoutsExample",
             imports: [
               "import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui'",
             ],
@@ -745,11 +1047,15 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
                 <Card className="border border-border/70 shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-lg">Action Card</CardTitle>
-                    <CardDescription>Include actions in the footer.</CardDescription>
+                    <CardDescription>
+                      Include actions in the footer.
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="flex items-center justify-between gap-3 text-sm text-gray-600">
                     <span>Launch the onboarding wizard</span>
-                    <Button size="sm" variant="outline">Open</Button>
+                    <Button size="sm" variant="outline">
+                      Open
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
@@ -758,14 +1064,14 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
         ],
       },
       {
-        id: 'switches',
-        title: 'Switches',
-        description: 'Entry: toggle binary settings with clear labeling.',
+        id: "switches",
+        title: "Switches",
+        description: "Entry: toggle binary settings with clear labeling.",
         blocks: [
           {
-            id: 'switches-default',
-            title: 'Defaults',
-            componentName: 'SwitchDefaultsExample',
+            id: "switches-default",
+            title: "Defaults",
+            componentName: "SwitchDefaultsExample",
             imports: ["import { Switch } from '@/components/ui'"],
             code: `
 <div className="space-y-4">
@@ -789,15 +1095,23 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Default switch</p>
-                    <p className="text-xs text-gray-500">Primary preset is on by default.</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      Default switch
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Primary preset is on by default.
+                    </p>
                   </div>
                   <Switch initialState />
                 </div>
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-900">Outline variant</p>
-                    <p className="text-xs text-gray-500">Works well on tinted backgrounds.</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      Outline variant
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      Works well on tinted backgrounds.
+                    </p>
                   </div>
                   <Switch variant="outline" initialState={false} />
                 </div>
@@ -805,9 +1119,9 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
             ),
           },
           {
-            id: 'switches-sizes',
-            title: 'Sizes',
-            componentName: 'SwitchSizesExample',
+            id: "switches-sizes",
+            title: "Sizes",
+            componentName: "SwitchSizesExample",
             imports: ["import { Switch } from '@/components/ui'"],
             code: `
 <div className="flex flex-wrap gap-4">
@@ -831,14 +1145,14 @@ const [showPasswordInput, setShowPasswordInput] = useState(false)
         ],
       },
       {
-        id: 'selects',
-        title: 'Select',
-        description: 'Entry: use select for compact single-choice inputs.',
+        id: "selects",
+        title: "Select",
+        description: "Entry: use select for compact single-choice inputs.",
         blocks: [
           {
-            id: 'selects-basic',
-            title: 'Single select',
-            componentName: 'SelectExample',
+            id: "selects-basic",
+            title: "Single select",
+            componentName: "SelectExample",
             imports: [
               "import { useState } from 'react'",
               "import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'",
@@ -878,9 +1192,9 @@ const [selectValue, setSelectValue] = useState('design')
             ),
           },
           {
-            id: 'selects-disabled',
-            title: 'Disabled select',
-            componentName: 'SelectDisabledExample',
+            id: "selects-disabled",
+            title: "Disabled select",
+            componentName: "SelectDisabledExample",
             imports: [
               "import { Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui'",
             ],
@@ -914,15 +1228,17 @@ const [selectValue, setSelectValue] = useState('design')
         ],
       },
       {
-        id: 'tabs',
-        title: 'Tabs',
-        description: 'Entry: organize related content without navigation.',
+        id: "tabs",
+        title: "Tabs",
+        description: "Entry: organize related content without navigation.",
         blocks: [
           {
-            id: 'tabs-basic',
-            title: 'Example',
-            componentName: 'TabsExample',
-            imports: ["import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'"],
+            id: "tabs-basic",
+            title: "Example",
+            componentName: "TabsExample",
+            imports: [
+              "import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui'",
+            ],
             code: `
 <Tabs defaultValue="activity">
   <TabsList>
@@ -963,21 +1279,23 @@ const [selectValue, setSelectValue] = useState('design')
         ],
       },
       {
-        id: 'dropdowns',
-        title: 'Dropdown',
-        description: 'Entry: searchable dropdown for single and multi-select.',
+        id: "dropdowns",
+        title: "Dropdown",
+        description: "Entry: searchable dropdown for single and multi-select.",
         blocks: [
           {
-            id: 'dropdowns-single',
-            title: 'Single select',
-            componentName: 'DropdownSingleExample',
-            imports: ["import { Dropdown, type DropdownOption } from '@/components/ui'"],
+            id: "dropdowns-single",
+            title: "Single select",
+            componentName: "DropdownSingleExample",
+            imports: [
+              "import { Dropdown, type DropdownOption } from '@/components/ui'",
+            ],
             setup: `
 const dropdownOptions: DropdownOption[] = [
   { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
   { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
   { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-  { value: 'opensys', label: 'AIBase', description: 'Invoices and usage', disabled: true },
+  { value: 'opensys', label: 'OpenSys', description: 'Invoices and usage', disabled: true },
 ]
 `,
             code: `
@@ -996,16 +1314,18 @@ const dropdownOptions: DropdownOption[] = [
             ),
           },
           {
-            id: 'dropdowns-searchable',
-            title: 'Searchable dropdown',
-            componentName: 'DropdownSearchExample',
-            imports: ["import { Dropdown, type DropdownOption } from '@/components/ui'"],
+            id: "dropdowns-searchable",
+            title: "Searchable dropdown",
+            componentName: "DropdownSearchExample",
+            imports: [
+              "import { Dropdown, type DropdownOption } from '@/components/ui'",
+            ],
             setup: `
 const dropdownOptions: DropdownOption[] = [
   { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
   { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
   { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-  { value: 'opensys', label: 'AIBase', description: 'Invoices and usage', disabled: true },
+  { value: 'opensys', label: 'OpenSys', description: 'Invoices and usage', disabled: true },
 ]
 `,
             code: `
@@ -1026,9 +1346,9 @@ const dropdownOptions: DropdownOption[] = [
             ),
           },
           {
-            id: 'dropdowns-multi',
-            title: 'Multi select',
-            componentName: 'DropdownMultiExample',
+            id: "dropdowns-multi",
+            title: "Multi select",
+            componentName: "DropdownMultiExample",
             imports: [
               "import { useState } from 'react'",
               "import { Dropdown, type DropdownOption } from '@/components/ui'",
@@ -1038,7 +1358,7 @@ const dropdownOptions: DropdownOption[] = [
   { value: 'alerts', label: 'Alerts', description: 'Activity and system notices' },
   { value: 'reports', label: 'Reports', description: 'Monthly rollups' },
   { value: 'exports', label: 'Exports', description: 'CSV + PDF deliveries' },
-  { value: 'opensys', label: 'AIBase', description: 'Invoices and usage', disabled: true },
+  { value: 'opensys', label: 'OpenSys', description: 'Invoices and usage', disabled: true },
 ]
 const [multiDropdownValue, setMultiDropdownValue] = useState<string[]>(['alerts'])
 `,
@@ -1066,14 +1386,15 @@ const [multiDropdownValue, setMultiDropdownValue] = useState<string[]>(['alerts'
         ],
       },
       {
-        id: 'modals',
-        title: 'Modal',
-        description: 'Entry: confirm or collect input with minimal context switching.',
+        id: "modals",
+        title: "Modal",
+        description:
+          "Entry: confirm or collect input with minimal context switching.",
         blocks: [
           {
-            id: 'modals-basic',
-            title: 'Example',
-            componentName: 'ModalExample',
+            id: "modals-basic",
+            title: "Example",
+            componentName: "ModalExample",
             imports: [
               "import { useState } from 'react'",
               "import { Button, Modal } from '@/components/ui'",
@@ -1125,7 +1446,9 @@ const [modalOpen, setModalOpen] = useState(false)
                 <Modal show={modalOpen} onClose={() => setModalOpen(false)} sm>
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">Review changes</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Review changes
+                      </h3>
                       <p className="text-sm text-gray-600">
                         This modal shows a short confirmation flow with actions.
                       </p>
@@ -1134,7 +1457,10 @@ const [modalOpen, setModalOpen] = useState(false)
                       Changes pending: 3 new updates, 1 removal.
                     </div>
                     <div className="flex flex-wrap gap-3 justify-end">
-                      <Button variant="secondary" onClick={() => setModalOpen(false)}>
+                      <Button
+                        variant="secondary"
+                        onClick={() => setModalOpen(false)}
+                      >
                         Cancel
                       </Button>
                       <Button>
@@ -1148,9 +1474,9 @@ const [modalOpen, setModalOpen] = useState(false)
             ),
           },
           {
-            id: 'modals-locked',
-            title: 'Overlay locked',
-            componentName: 'ModalLockedExample',
+            id: "modals-locked",
+            title: "Overlay locked",
+            componentName: "ModalLockedExample",
             imports: [
               "import { useState } from 'react'",
               "import { Button, Modal } from '@/components/ui'",
@@ -1188,7 +1514,9 @@ const [lockedModalOpen, setLockedModalOpen] = useState(false)
             render: () => (
               <>
                 <div className="flex flex-wrap items-center gap-3">
-                  <Button onClick={() => setLockedModalOpen(true)}>Open locked modal</Button>
+                  <Button onClick={() => setLockedModalOpen(true)}>
+                    Open locked modal
+                  </Button>
                 </div>
                 <Modal
                   show={lockedModalOpen}
@@ -1198,13 +1526,19 @@ const [lockedModalOpen, setLockedModalOpen] = useState(false)
                 >
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900">Overlay locked</h3>
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Overlay locked
+                      </h3>
                       <p className="text-sm text-gray-600">
-                        Clicking the backdrop shakes the modal instead of closing it.
+                        Clicking the backdrop shakes the modal instead of
+                        closing it.
                       </p>
                     </div>
                     <div className="flex flex-wrap justify-end gap-3">
-                      <Button variant="outline" onClick={() => setLockedModalOpen(false)}>
+                      <Button
+                        variant="outline"
+                        onClick={() => setLockedModalOpen(false)}
+                      >
                         Close
                       </Button>
                     </div>
@@ -1214,9 +1548,9 @@ const [lockedModalOpen, setLockedModalOpen] = useState(false)
             ),
           },
           {
-            id: 'modals-confirm',
-            title: 'Confirm modal helper',
-            componentName: 'ConfirmModalExample',
+            id: "modals-confirm",
+            title: "Confirm modal helper",
+            componentName: "ConfirmModalExample",
             imports: [
               "import { useState } from 'react'",
               "import { Button, confirmModal } from '@/components/ui'",
@@ -1265,24 +1599,35 @@ const runConfirm = async (type?: 'success' | 'warning' | 'danger' | 'error' | 'i
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
                   <Button onClick={() => runConfirm()}>Default</Button>
-                  <Button variant="outline" onClick={() => runConfirm('success')}>
+                  <Button
+                    variant="outline"
+                    onClick={() => runConfirm("success")}
+                  >
                     Success
                   </Button>
-                  <Button variant="outline" onClick={() => runConfirm('warning')}>
+                  <Button
+                    variant="outline"
+                    onClick={() => runConfirm("warning")}
+                  >
                     Warning
                   </Button>
-                  <Button variant="outline" onClick={() => runConfirm('danger')}>
+                  <Button
+                    variant="outline"
+                    onClick={() => runConfirm("danger")}
+                  >
                     Danger
                   </Button>
-                  <Button variant="outline" onClick={() => runConfirm('error')}>
+                  <Button variant="outline" onClick={() => runConfirm("error")}>
                     Error
                   </Button>
-                  <Button variant="outline" onClick={() => runConfirm('info')}>
+                  <Button variant="outline" onClick={() => runConfirm("info")}>
                     Info
                   </Button>
                 </div>
                 {confirmOutcome && (
-                  <p className="text-xs text-gray-500">Last result: {confirmOutcome}</p>
+                  <p className="text-xs text-gray-500">
+                    Last result: {confirmOutcome}
+                  </p>
                 )}
               </div>
             ),
@@ -1290,14 +1635,14 @@ const runConfirm = async (type?: 'success' | 'warning' | 'danger' | 'error' | 'i
         ],
       },
       {
-        id: 'tables',
-        title: 'Table',
-        description: 'Entry: robust data table with selection and actions.',
+        id: "tables",
+        title: "Table",
+        description: "Entry: robust data table with selection and actions.",
         blocks: [
           {
-            id: 'tables-advanced',
-            title: 'Data Table',
-            componentName: 'DataTableExample',
+            id: "tables-advanced",
+            title: "Data Table",
+            componentName: "DataTableExample",
             imports: [
               "import { useMemo, useState } from 'react'",
               "import { DataTable, type Column, Badge, DropdownMenuItem } from '@/components/ui'",
@@ -1466,44 +1811,58 @@ const paginatedInvoices = useMemo(() => {
                     filters={filterFields}
                     filterValues={tableFilters}
                     onFilterChange={(key, values) => {
-                      setTableFilters(prev => ({
+                      setTableFilters((prev) => ({
                         ...prev,
-                        [key]: values
-                      }))
+                        [key]: values,
+                      }));
                     }}
                     actions={(row) => (
                       <>
-                        <DropdownMenuItem onClick={() => alert('Edit ' + row.invoice)}>
-                          <span className="flex items-center"><Sparkles className="mr-2 h-4 w-4" /> Edit</span>
+                        <DropdownMenuItem
+                          onClick={() => alert("Edit " + row.invoice)}
+                        >
+                          <span className="flex items-center">
+                            <Sparkles className="mr-2 h-4 w-4" /> Edit
+                          </span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => alert('Delete ' + row.invoice)}>
-                          <span className="flex items-center text-red-600"><Check className="mr-2 h-4 w-4" /> Delete</span>
+                        <DropdownMenuItem
+                          onClick={() => alert("Delete " + row.invoice)}
+                        >
+                          <span className="flex items-center text-red-600">
+                            <Check className="mr-2 h-4 w-4" /> Delete
+                          </span>
                         </DropdownMenuItem>
                       </>
                     )}
                     sortColumn={tableSorting?.column}
                     sortDirection={tableSorting?.direction}
-                    onSortingChange={(column, direction) => setTableSorting({ column, direction })}
+                    onSortingChange={(column, direction) =>
+                      setTableSorting({ column, direction })
+                    }
                     page={tablePagination.page}
                     limit={tablePagination.limit}
                     total={filteredInvoices.length}
-                    onPageChange={(page) => setTablePagination(prev => ({ ...prev, page }))}
-                    onPageSizeChange={(limit) => setTablePagination({ page: 1, limit })}
+                    onPageChange={(page) =>
+                      setTablePagination((prev) => ({ ...prev, page }))
+                    }
+                    onPageSizeChange={(limit) =>
+                      setTablePagination({ page: 1, limit })
+                    }
                     searchKey="invoice"
                     searchValue={tableSearch}
                     onSearchChange={(value) => {
-                      setTableSearch(value)
-                      setTablePagination(prev => ({ ...prev, page: 1 }))
+                      setTableSearch(value);
+                      setTablePagination((prev) => ({ ...prev, page: 1 }));
                     }}
                   />
                 </div>
-              )
+              );
             },
           },
           {
-            id: 'tables-range',
-            title: 'Data Table (Range Filters)',
-            componentName: 'DataTableRangeFiltersExample',
+            id: "tables-range",
+            title: "Data Table (Range Filters)",
+            componentName: "DataTableRangeFiltersExample",
             imports: [
               "import { useMemo, useState } from 'react'",
               "import { DataTable, type Column, Badge } from '@/components/ui'",
@@ -1658,28 +2017,34 @@ const paginatedRuns = useMemo(() => {
                     filters={runFilterFields}
                     filterValues={runFilters}
                     onFilterChange={(key, values) => {
-                      setRunFilters(prev => ({
+                      setRunFilters((prev) => ({
                         ...prev,
-                        [key]: values
-                      }))
+                        [key]: values,
+                      }));
                     }}
                     sortColumn={runSorting?.column}
                     sortDirection={runSorting?.direction}
-                    onSortingChange={(column, direction) => setRunSorting({ column, direction })}
+                    onSortingChange={(column, direction) =>
+                      setRunSorting({ column, direction })
+                    }
                     page={runPagination.page}
                     limit={runPagination.limit}
                     total={filteredRuns.length}
-                    onPageChange={(page) => setRunPagination(prev => ({ ...prev, page }))}
-                    onPageSizeChange={(limit) => setRunPagination({ page: 1, limit })}
+                    onPageChange={(page) =>
+                      setRunPagination((prev) => ({ ...prev, page }))
+                    }
+                    onPageSizeChange={(limit) =>
+                      setRunPagination({ page: 1, limit })
+                    }
                     searchKey="job"
                     searchValue={runSearch}
                     onSearchChange={(value) => {
-                      setRunSearch(value)
-                      setRunPagination(prev => ({ ...prev, page: 1 }))
+                      setRunSearch(value);
+                      setRunPagination((prev) => ({ ...prev, page: 1 }));
                     }}
                   />
                 </div>
-              )
+              );
             },
           },
         ],
@@ -1713,36 +2078,43 @@ const paginatedRuns = useMemo(() => {
       runFilterFields,
       runColumns,
       runs,
-    ]
-  )
+    ],
+  );
 
   if (!user) {
-    return null
+    return null;
   }
 
-  if (user.role !== 'admin') {
+  if (user.role !== "admin") {
     return (
       <div className="space-y-4 max-w-3xl mx-auto">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">UI Components</h2>
-          <p className="text-sm text-gray-600">Component previews are available to administrators only.</p>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            UI Components
+          </h2>
+          <p className="text-sm text-gray-600">
+            Component previews are available to administrators only.
+          </p>
         </div>
         <Card>
           <CardContent className="p-6">
             <p className="text-sm text-gray-600">
-              You do not have permission to view this page. Please contact an administrator.
+              You do not have permission to view this page. Please contact an
+              administrator.
             </p>
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   if (!isLoading && !systemSettings?.show_ui_components) {
     return (
       <div className="space-y-4 max-w-3xl mx-auto">
         <div>
-          <h2 className="text-2xl font-semibold text-gray-900">UI Components</h2>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            UI Components
+          </h2>
           <p className="text-sm text-gray-600">
             This page is disabled in developer settings.
           </p>
@@ -1750,17 +2122,18 @@ const paginatedRuns = useMemo(() => {
         <Card>
           <CardContent className="p-6">
             <p className="text-sm text-gray-600">
-              Ask an administrator to enable "Show UI Components page" in Developer Settings.
+              Ask an administrator to enable "Show UI Components page" in
+              Developer Settings.
             </p>
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   const toggleCode = (blockId: string) => {
-    setOpenCode((prev) => ({ ...prev, [blockId]: !prev[blockId] }))
-  }
+    setOpenCode((prev) => ({ ...prev, [blockId]: !prev[blockId] }));
+  };
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -1780,7 +2153,9 @@ const paginatedRuns = useMemo(() => {
             </SheetTrigger>
             <SheetContent side="left" className="w-[200px] p-4">
               <div className="mt-4 space-y-4">
-                <h2 className="text-lg font-semibold tracking-tight">Sections</h2>
+                <h2 className="text-lg font-semibold tracking-tight">
+                  Sections
+                </h2>
                 <div className="flex flex-col space-y-1">
                   {sections.map((section) => (
                     <Button
@@ -1788,7 +2163,9 @@ const paginatedRuns = useMemo(() => {
                       variant="ghost"
                       className="justify-start"
                       onClick={() => {
-                        document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth' })
+                        document
+                          .getElementById(section.id)
+                          ?.scrollIntoView({ behavior: "smooth" });
                       }}
                     >
                       {section.title}
@@ -1804,7 +2181,9 @@ const paginatedRuns = useMemo(() => {
       <div className="grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
         <aside className="hidden lg:block">
           <nav className="sticky top-24 space-y-2 rounded-xl border border-border/60 bg-white p-4 shadow-sm">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Sections</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Sections
+            </p>
             <ul className="space-y-1 text-sm">
               {sections.map((section) => (
                 <li key={section.id}>
@@ -1830,32 +2209,34 @@ const paginatedRuns = useMemo(() => {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   {section.blocks.map((block) => {
-                    const formattedSnippet = normalizeSnippet(buildSnippet(block))
+                    const formattedSnippet = normalizeSnippet(
+                      buildSnippet(block),
+                    );
                     return (
                       <div
                         key={block.id}
                         className="rounded-lg border border-dashed border-border/70 p-4 space-y-3"
                       >
                         <div className="flex items-center justify-between">
-                          <p className="text-xs font-semibold uppercase text-gray-500">{block.title}</p>
+                          <p className="text-xs font-semibold uppercase text-gray-500">
+                            {block.title}
+                          </p>
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => toggleCode(block.id)}
                           >
-                            {openCode[block.id] ? 'Hide code' : 'Show code'}
+                            {openCode[block.id] ? "Hide code" : "Show code"}
                           </Button>
                         </div>
-                        <div className="space-y-2">
-                          {block.render()}
-                        </div>
+                        <div className="space-y-2">{block.render()}</div>
                         {openCode[block.id] && (
                           <pre className="mt-3 rounded-md bg-gray-900 p-4 text-xs text-gray-100 overflow-x-auto">
                             <code>{formattedSnippet}</code>
                           </pre>
                         )}
                       </div>
-                    )
+                    );
                   })}
                 </CardContent>
               </Card>
@@ -1864,5 +2245,5 @@ const paginatedRuns = useMemo(() => {
         </div>
       </div>
     </div>
-  )
+  );
 }

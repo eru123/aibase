@@ -198,7 +198,7 @@ final class EmailService
         $loginUrl = $this->appUrl('/login');
 
         return [
-            'companyName' => $companyName ?: 'AIBase',
+            'companyName' => $companyName ?: 'OpenSys',
             'currentYear' => (int)gmdate('Y'),
             'logoUrl' => $logoUrl ?: null,
             'companyEmail' => $this->normalizeOptionalString($companyEmail),
@@ -221,7 +221,7 @@ final class EmailService
             }
         }
 
-        return 'AIBase';
+        return 'OpenSys';
     }
 
     private function readEnv(string $key): ?string

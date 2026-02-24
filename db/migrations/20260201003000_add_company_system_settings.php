@@ -11,7 +11,7 @@ final class AddCompanySystemSettings extends AbstractMigration
     {
         $this->execute(
             "INSERT INTO system_settings (`key`, `value`) VALUES
-                ('company_name', 'AIBase'),
+                ('company_name', 'OpenSys'),
                 ('company_logo_url', ''),
                 ('company_email', ''),
                 ('company_phone', ''),
