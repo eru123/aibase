@@ -10,7 +10,7 @@ import { InviteAcceptance } from "./pages/auth/invite-accept";
 import { AdminSetup } from "./pages/auth/admin-setup";
 import ForgotPassword from "./pages/auth/forgot-password";
 import ResetPassword from "./pages/auth/reset-password";
-import { AuthProvider } from "./lib/auth";
+import { AuthInitializer } from "./lib/auth";
 import { lazy, Suspense } from "react";
 
 // Lazy load pages
@@ -57,7 +57,7 @@ const CustomersEmailTracker = lazy(
 
 function App() {
   return (
-    <AuthProvider>
+    <AuthInitializer>
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
@@ -280,7 +280,7 @@ function App() {
         />
       </Routes>
       <GoeyToaster position="top-right" />
-    </AuthProvider>
+    </AuthInitializer>
   );
 }
 
