@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "sonner";
+import { goeyToast as toast } from "goey-toast";
 import {
   Badge,
   Button,

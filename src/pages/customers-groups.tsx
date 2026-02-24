@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import axios from "axios";
-import { toast } from "sonner";
+import { goeyToast as toast } from "goey-toast";
 import {
   Button,
   Card,

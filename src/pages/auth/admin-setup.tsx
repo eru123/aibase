@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { toast } from 'sonner'
+import { goeyToast as toast } from "goey-toast";
 import { Button, Input, Card, CardHeader, CardContent, CardTitle, CardDescription, Badge, Label } from '@/components/ui'
 import { useAuth } from '../../lib/auth'
 import { Settings, Shield, CheckCircle, Eye, EyeOff, Loader2, User } from 'lucide-react'

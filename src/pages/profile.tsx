@@ -13,7 +13,7 @@ import {
   TabsContent,
   Avatar,
 } from "@/components/ui";
-import { toast } from "sonner";
+import { goeyToast as toast } from "goey-toast";
 import type { User } from "@/types";
 import { Camera, Shield, User as UserIcon, Settings, Lock } from "lucide-react";
 import { useParams } from "react-router-dom";

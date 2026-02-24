@@ -14,7 +14,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import { usePaginatedApi } from "@/hooks/usePaginatedApi";
 import { Plus, Edit, Trash, FileText } from "lucide-react";
-import { toast } from "sonner";
+import { goeyToast as toast } from "goey-toast";
 import axios from "axios";
 
 type EmailTemplate = {

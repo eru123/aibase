@@ -3,7 +3,7 @@ import { Navigate, Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { toast } from 'sonner'
+import { goeyToast as toast } from "goey-toast";
 import { Button, Input, Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui'
 import { Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../../lib/auth'

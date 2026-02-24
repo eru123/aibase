@@ -20,8 +20,15 @@ export default defineConfig({
     assetsDir: "__",
     rolldownOptions: {
       output: {
-        manualChunks: {
-          react: ["react", "react-dom", "react-router-dom", "axios"],
+        manualChunks(id) {
+          if (
+            id.includes("node_modules/react") ||
+            id.includes("node_modules/react-dom") ||
+            id.includes("node_modules/react-router-dom") ||
+            id.includes("node_modules/axios")
+          ) {
+            return "react";
+          }
         },
       },
     },

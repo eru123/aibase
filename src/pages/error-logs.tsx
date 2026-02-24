@@ -19,7 +19,7 @@ import { useAuth } from "@/lib/auth";
 import { usePaginatedApi } from "@/hooks/usePaginatedApi";
 import { Temporal } from "@js-temporal/polyfill";
 import axios from "axios";
-import { toast } from "sonner";
+import { goeyToast as toast } from "goey-toast";
 
 type ErrorLogEntry = {
   id: number;
