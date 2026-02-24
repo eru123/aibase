@@ -20,11 +20,16 @@ class CustomerProfileController extends BaseController
         $limit = max(1, min(100, (int)($ctx->query('limit') ?? 20)));
         $offset = ($page - 1) * $limit;
         $search = trim((string)($ctx->query('search') ?? ''));
+        $isActiveFilter = $ctx->query('is_active');
 
         $query = CustomerProfile::query()->select(['customer_profiles.*']);
         if ($search !== '') {
             $term = '%' . $search . '%';
             $query->whereRaw('(customer_profiles.first_name LIKE ? OR customer_profiles.last_name LIKE ? OR customer_profiles.company_name LIKE ? OR customer_profiles.email LIKE ? OR customer_profiles.phone LIKE ?)', [$term, $term, $term, $term, $term]);
+        }
+        if ($isActiveFilter !== null && $isActiveFilter !== '') {
+            $val = filter_var($isActiveFilter, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+            $query->where('customer_profiles.is_active', $val);
         }
 
         $rows = $query->orderBy('customer_profiles.updated_at', 'desc')->limit($limit)->offset($offset)->get();
@@ -32,6 +37,10 @@ class CustomerProfileController extends BaseController
         if ($search !== '') {
             $term = '%' . $search . '%';
             $countQuery->whereRaw('(customer_profiles.first_name LIKE ? OR customer_profiles.last_name LIKE ? OR customer_profiles.company_name LIKE ? OR customer_profiles.email LIKE ? OR customer_profiles.phone LIKE ?)', [$term, $term, $term, $term, $term]);
+        }
+        if ($isActiveFilter !== null && $isActiveFilter !== '') {
+            $val = filter_var($isActiveFilter, FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+            $countQuery->where('customer_profiles.is_active', $val);
         }
 
         return $this->ok($ctx, [

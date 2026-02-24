@@ -11,6 +11,7 @@ import {
   DropdownMenuItem,
   confirmModal,
   Modal,
+  Switch,
 } from "@/components/ui";
 import { usePaginatedApi } from "@/hooks/usePaginatedApi";
 import { Plus } from "lucide-react";
@@ -38,13 +39,83 @@ export default function CustomersProfilesPage() {
     company_name: "",
     phone: "",
     email: "",
+    is_active: 1,
   });
   const [saving, setSaving] = useState(false);
 
-  const { data, loading, pagination, handlePageChange, handleSearch, refresh } =
-    usePaginatedApi<CustomerProfile>("/api/customers/profiles", {
-      initialLimit: 10,
+  const {
+    data,
+    loading,
+    pagination,
+    handlePageChange,
+    handleLimitChange,
+    handleSearch,
+    handleFilter,
+    params,
+    refresh,
+  } = usePaginatedApi<CustomerProfile>("/api/customers/profiles", {
+    initialLimit: 10,
+  });
+
+  const tableFilters = useMemo(
+    () => [
+      {
+        label: "Status",
+        value: "status",
+        type: "select" as const,
+        options: [
+          { label: "Active", value: "active" },
+          { label: "Inactive", value: "inactive" },
+        ],
+        searchOnChanged: true,
+      },
+    ],
+    [],
+  );
+
+  const filterValues = useMemo(() => {
+    const values: Record<string, any> = {};
+
+    if (params.filters?.is_active !== undefined) {
+      const selected = new Set<string>();
+      if (params.filters.is_active === "true") selected.add("active");
+      if (params.filters.is_active === "false") selected.add("inactive");
+      if (selected.size > 0) values.status = selected;
+    }
+
+    return values;
+  }, [params.filters]);
+
+  const handleFilterChange = (key: string, value: any) => {
+    const nextFilters: any = { ...params.filters };
+
+    if (key === "status") {
+      const selected = value as Set<string>;
+      delete nextFilters.is_active;
+
+      if (selected.has("active")) nextFilters.is_active = "true";
+      if (selected.has("inactive")) nextFilters.is_active = "false";
+      handleFilter(nextFilters);
+    }
+  };
+
+  const handleBatchFilterChange = (updates: Record<string, any>) => {
+    const nextFilters: any = { ...params.filters };
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (key === "status") {
+        const selected = value as Set<string>;
+        delete nextFilters.is_active;
+
+        if (selected.has("active")) nextFilters.is_active = "true";
+        if (selected.has("inactive")) nextFilters.is_active = "false";
+      } else {
+        nextFilters[key] = value;
+      }
     });
+
+    handleFilter(nextFilters);
+  };
 
   const openCreate = () => {
     setEditId(null);
@@ -55,6 +126,7 @@ export default function CustomersProfilesPage() {
       company_name: "",
       phone: "",
       email: "",
+      is_active: 1,
     });
     setModalOpen(true);
   };
@@ -68,6 +140,7 @@ export default function CustomersProfilesPage() {
       company_name: row.company_name || "",
       phone: row.phone || "",
       email: row.email,
+      is_active: row.is_active ? 1 : 0,
     });
     setModalOpen(true);
   };
@@ -152,15 +225,24 @@ export default function CustomersProfilesPage() {
       </div>
 
       <Card>
-        <CardContent className="p-0">
+        <CardContent className="p-4">
           <DataTable
             data={data}
             columns={columns}
             isLoading={loading}
             page={pagination.page}
+            limit={pagination.limit}
             total={pagination.total}
             onPageChange={handlePageChange}
+            onPageSizeChange={handleLimitChange}
+            searchKey="search"
+            searchValue={params.search}
             onSearchChange={handleSearch}
+            filters={tableFilters}
+            filterValues={filterValues}
+            onFilterChange={handleFilterChange}
+            onBatchFilterChange={handleBatchFilterChange}
+            onReset={() => handleFilter({})}
             actions={(row: CustomerProfile) => (
               <>
                 <DropdownMenuItem onClick={() => openEdit(row)}>
@@ -246,6 +328,24 @@ export default function CustomersProfilesPage() {
                 value={form.phone}
                 onChange={(e) => setForm({ ...form, phone: e.target.value })}
               />
+            </div>
+            <div className="space-y-2 flex flex-col justify-center">
+              <Label htmlFor="is_active">Active Status</Label>
+              <div className="flex items-center space-x-2 pt-1">
+                <Switch
+                  id="is_active"
+                  checked={form.is_active === 1}
+                  onCheckedChange={(checked) =>
+                    setForm({ ...form, is_active: checked ? 1 : 0 })
+                  }
+                />
+                <Label
+                  htmlFor="is_active"
+                  className="cursor-pointer font-normal text-muted-foreground"
+                >
+                  {form.is_active === 1 ? "Active profile" : "Inactive profile"}
+                </Label>
+              </div>
             </div>
           </div>
 
