@@ -1,6 +1,6 @@
 # Getting Started (Starter Template)
 
-This guide gets AI Base running as a reusable starter template for local development.
+This guide gets OpenSys running as a reusable starter template for local development.
 
 ## Prerequisites
 

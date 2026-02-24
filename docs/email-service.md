@@ -1,6 +1,6 @@
 # Email Service
 
-AI Base uses PHPMailer for transactional email flows (invites, verification, password resets, notifications).
+OpenSys uses PHPMailer for transactional email flows (invites, verification, password resets, notifications).
 
 ## SMTP configuration
 

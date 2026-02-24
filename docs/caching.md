@@ -1,6 +1,6 @@
 # Caching Notes
 
-AI Base includes a database-backed key-value cache (`kv_store`) used for:
+OpenSys includes a database-backed key-value cache (`kv_store`) used for:
 
 - server-side caching,
 - request throttling/rate-limit state,

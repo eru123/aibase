@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This document describes the baseline deployment flow for AI Base as a starter template.
+This document describes the baseline deployment flow for OpenSys as a starter template.
 
 ## 1) Build frontend assets
 

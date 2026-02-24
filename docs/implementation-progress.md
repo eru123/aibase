@@ -1,6 +1,6 @@
 # Starter Template Scope
 
-AI Base is now positioned as a reusable starter template. Current baseline capabilities include:
+OpenSys is now positioned as a reusable starter template. Current baseline capabilities include:
 
 - Auth lifecycle: register, login, refresh, logout, forgot/reset password, email verification.
 - Admin bootstrap and invitation-based user onboarding.

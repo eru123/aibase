@@ -1,6 +1,6 @@
-# AI Base Starter Template
+# OpenSys Starter Template
 
-AI Base is a production-minded **starter template** for building internal platforms and SaaS control panels with a PHP 8.2+ API and a React + Vite + TypeScript frontend.
+OpenSys is a production-minded **starter template** for building internal platforms and SaaS control panels with a PHP 8.2+ API and a React + Vite + TypeScript frontend.
 
 It gives you a strong foundation out of the box:
 
@@ -13,7 +13,7 @@ It gives you a strong foundation out of the box:
 
 ## Why this template exists
 
-Most teams lose time rebuilding the same platform concerns (auth, settings, logs, admin UX) before shipping domain features. AI Base is designed to remove that friction while keeping architecture clean, explicit, and extensible.
+Most teams lose time rebuilding the same platform concerns (auth, settings, logs, admin UX) before shipping domain features. OpenSys is designed to remove that friction while keeping architecture clean, explicit, and extensible.
 
 ## Tech Stack
 

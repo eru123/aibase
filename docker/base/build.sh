@@ -7,7 +7,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Building AI Base Docker Image${NC}"
+echo -e "${GREEN}Building OpenSys Docker Image${NC}"
 echo "=========================================="
 
 # Get version from user or use 'latest'

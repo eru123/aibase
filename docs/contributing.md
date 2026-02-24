@@ -1,4 +1,4 @@
-# Contributing to AI Base Starter Template
+# Contributing to OpenSys Starter Template
 
 Thanks for contributing. Keep changes reviewable, secure, and production-conscious.
 

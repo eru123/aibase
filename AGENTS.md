@@ -1,8 +1,8 @@
-# AGENTS.md — General Agent Operating Guide for AI Base
+# AGENTS.md — General Agent Operating Guide for OpenSys
 
 ## Mission
 
-Build and maintain AI Base as a secure, high-performance, low-friction platform with:
+Build and maintain OpenSys as a secure, high-performance, low-friction platform with:
 
 - **Backend rigor (PHP 8.2+)**: explicit validation, predictable APIs, and safe data access.
 - **Frontend precision (React + Vite + TypeScript + Tailwind)**: type-safe state, elegant UX, and fast interactions.
